@@ -6,6 +6,7 @@ project(gitea2rss
 
 include(GNUInstallDirs)
 find_package(PkgConfig REQUIRED)
+pkg_check_modules(CURLPP REQUIRED curlpp)
 pkg_check_modules(JSONCPP REQUIRED jsoncpp)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -18,7 +19,10 @@ set(CMAKE_CXX_FLAGS_DEBUG
 
 include_directories(${PROJECT_BINARY_DIR})
 
+include_directories(${CURLPP_INCLUDE_DIRS})
 include_directories(${JSONCPP_INCLUDE_DIRS})
+
+link_directories(${CURLPP_LIBRARY_DIRS})
 link_directories(${JSONCPP_LIBRARY_DIRS})
 
 # Write version in header
@@ -29,7 +33,7 @@ configure_file(
 
 file(GLOB sources src/*.cpp)
 add_executable(${PROJECT_NAME} "${sources}")
-target_link_libraries(${PROJECT_NAME} ${JSONCPP_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${CURLPP_LIBRARIES} ${JSONCPP_LIBRARIES})
 install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 set(WITH_MAN "YES" CACHE STRING "WITH_MAN defaults to \"YES\"")
