@@ -1,0 +1,3 @@
+= gitea2rss
+
+*gitea2rss* turns https://gitea.io[Gitea] releases into RSS feeds.

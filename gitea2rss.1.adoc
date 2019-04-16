@@ -1,0 +1,27 @@
+= gitea2rss(1)
+:doctype:       manpage
+:Author:        tastytea
+:Email:         tastytea@tastytea.de
+:Date:          2019-04-17
+:Revision:      0.0.0
+:man source:    gitea2rss
+:man version:   {revision}
+:man manual:    General Commands Manual
+
+== NAME
+
+gitea2rss - Turns Gitea releases into RSS feeds.
+
+== SYNOPSIS
+
+*gitea2rss* _URL of Gitea project_
+
+== EXAMPLES
+
+gitea2rss https://example.com/user/repo
+
+== REPORTING BUGS
+
+Bugtracker: https://schlomp.space/tastytea/gitea2rss/issues
+
+E-mail: tastytea@tastytea.de
