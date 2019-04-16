@@ -24,6 +24,7 @@
 #include <curlpp/Options.hpp>
 #include <curlpp/Exception.hpp>
 #include <curlpp/Infos.hpp>
+#include <jsoncpp/json/json.h>
 #include "version.hpp"
 
 using std::cout;
@@ -31,6 +32,7 @@ using std::cerr;
 using std::endl;
 using std::string;
 using std::ostringstream;
+using std::stringstream;
 using std::uint16_t;
 
 namespace curlopts = curlpp::options;
@@ -84,7 +86,15 @@ int main(int argc, char *argv[])
     const string baseurl = url.substr(0, pos_repo - 1);
     const string repo = url.substr(pos_repo);
 
-    cout << get_http(baseurl + "/api/v1/repos/" + repo + "/releases");
+    stringstream data(get_http(baseurl + "/api/v1/repos/"
+                               + repo + "/releases"));
+    Json::Value json;
+    data >> json;
+    for (const Json::Value &release : json)
+    {
+        cout << release["name"] << endl;
+        // cout << release["body"] << endl;
+    }
 
     return 0;
 }
