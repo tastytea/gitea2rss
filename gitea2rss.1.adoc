@@ -19,8 +19,13 @@ gitea2rss - Generates RSS feeds from Gitea releases.
 == DESCRIPTION
 
 gitea2rss fetches the releases from the Gitea API, converts the data into an RSS
-feed and dumps it to stdout. You can use cron to generate the feed at fixed
-internals.
+feed and dumps it to stdout. You can use it as a CGI script to generate the
+feeds dynamically or simply use cron to generate the feeds at fixed intervals.
+
+If you want to use gitea2rss as a CGI script, you have to set
+*GITEA2RSS_BASEURL* to the basis URL of your instance, without the trailing
+slash, for example: _https://git.example.com_. The *QUERY_STRING* must contain
+_repo=user/project_.
 
 The generated RSS feed contains the *channel* elements _title_, _link_,
 _description_, _generator_ and _lastBuildDate_ and the *item* elements _title_,

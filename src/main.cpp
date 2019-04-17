@@ -112,9 +112,9 @@ int main(int argc, char *argv[])
         {
             return 1;
         }
-        url = string(envbaseurl) + "/" + query.substr(query.find('=') + 1);
-        // cout << "Content-Type: application/rss+xml\n\n";
-        cout << "Content-Type: text/plain\n\n";
+        size_t pos = query.find("repo=");
+        url = string(envbaseurl) + "/" + query.substr(query.find('=', pos) + 1);
+        cout << "Content-Type: application/rss+xml\n\n";
     }
     else if (argc < 2)
     {

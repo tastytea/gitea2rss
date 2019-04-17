@@ -2,7 +2,7 @@
 
 *gitea2rss* Generates RSS feeds from https://gitea.io[Gitea] releases.
 
-https://rss.schlomp.space/tastytea/gitea2rss.rss[Subscribe to gitea2rss releases].
+https://rss.schlomp.space/?repo=tastytea/gitea2rss.rss[Subscribe to gitea2rss releases].
 
 == Usage
 
