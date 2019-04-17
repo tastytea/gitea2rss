@@ -24,8 +24,9 @@ feeds dynamically or simply use cron to generate the feeds at fixed intervals.
 
 If you want to use gitea2rss as a CGI script, you have to set
 *GITEA2RSS_BASEURL* to the basis URL of your instance, without the trailing
-slash, for example: _https://git.example.com_. The *QUERY_STRING* must contain
-_repo=user/project_.
+slash. For example: _https://git.example.com_. The *QUERY_STRING* must contain
+_repo=user/project_. The feed-URL for alice's project, cooltool, would be:
+`https://rss.example.com/?repo=alice/cooltool`.
 
 You can let Gitea automatically insert links to your RSS feeds by editing
 `${GITEA_CUSTOM}/templates/custom/header.tmpl` and putting something like
@@ -37,11 +38,13 @@ this in it:
 
 The generated RSS feed contains the *channel* elements _title_, _link_,
 _description_, _generator_ and _lastBuildDate_ and the *item* elements _title_,
-_link_, _guid_, _pubDate_ and _description_.
+_link_, _guid_, _pubDate_ and _description_. Since Gitea has no individual pages
+for each release, _link_ elements in *item* are set to the overview page for
+releases.
 
 == EXAMPLES
 
-gitea2rss https://example.com/user/repo > repo.rss
+gitea2rss https://git.example.com/user/repo > repo.rss
 
 === Example rss feed
 
@@ -51,16 +54,18 @@ gitea2rss https://example.com/user/repo > repo.rss
     <title>gitea2rss releases</title>
     <link>https://schlomp.space/tastytea/gitea2rss</link>
     <description>Releases of tastytea/gitea2rss</description>
-    <generator>gitea2rss 0.1.0</generator>
-    <lastBuildDate>Wed, 17 Apr 2019 05:07:25 +0200</lastBuildDate>
+    <generator>gitea2rss 0.3.0</generator>
+    <lastBuildDate>Wed, 17 Apr 2019 20:31:15 +0200</lastBuildDate>
     <item>
       <title>gitea2rss: 0.1.0</title>
       <link>https://schlomp.space/tastytea/gitea2rss/releases</link>
       <guid isPermaLink="false">schlomp.space release 169</guid>
       <pubDate>Wed, 17 Apr 2019 05:37:10 +0200</pubDate>
-      <description><![CDATA[<p><strong>Stable</strong></p><pre>
-First release. Everything works, as far as I can tell.
-</pre>]]></description>
+      <description>
+        <![CDATA[<p><strong>Stable</strong></p>
+<pre>First release. Everything works, as far as I can tell.</pre>
+        <p><a href="https://schlomp.space/tastytea/gitea2rss/archive/0.1.0.tar.gz">Download tarball</a></p>]]>
+      </description>
     </item>
   </channel>
 </rss>
