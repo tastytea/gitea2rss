@@ -32,6 +32,7 @@ You can let Gitea automatically insert links to your RSS feeds by editing
 `${GITEA_CUSTOM}/templates/custom/header.tmpl` and putting something like
 this in it:
 
+[source,html]
 ----
 <link rel="alternate" type="application/rss+xml" title="Releases of {{.Repository.Name}}" href="https://rss.example.com/?repo={{.Repository.Owner.Name}}/{{.Repository.Name}}" />
 ----
@@ -49,13 +50,14 @@ variables. See *curl*(1), section _ENVIRONMENT_.
 
 == EXAMPLES
 
-`gitea2rss https://git.example.com/user/repo > repo.rss`
+gitea2rss https://git.example.com/user/repo > repo.rss
 
-`https_proxy="socks4a://user:pass@127.0.0.1:9050/" gitea2rss
-https://git.example.com/user/repo`
+https_proxy="socks4a://user:pass@127.0.0.1:9050/" gitea2rss
+https://git.example.com/user/repo
 
 === Example RSS feed
 
+[source,xml]
 ----
 <rss version="2.0">
   <channel>
