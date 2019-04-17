@@ -1,3 +1,71 @@
 = gitea2rss
 
 *gitea2rss* turns https://gitea.io[Gitea] releases into RSS feeds.
+
+== Usage
+
+See https://schlomp.space/tastytea/gitea2rss/src/branch/master/gitea2rss.1.adoc[manpage].
+
+== Install
+
+=== Gentoo
+
+Add my https://schlomp.space/tastytea/overlay[repository] and install it from
+there.
+
+[source,shellsession]
+----
+eselect repository enable tastytea
+echo "dev-util/gitea2rss ~amd64" >> /etc/portage/package.accept_keywords/gitea2rss
+emaint sync -r tastytea
+emerge -a dev-util/gitea2rss
+----
+
+=== From source
+
+==== Dependencies
+
+* Tested OS: Linux
+* C++ compiler (tested: https://gcc.gnu.org/[gcc] 8
+* https://cmake.org/[cmake] (at least: 3.6)
+* https://pkgconfig.freedesktop.org/wiki/[pkgconfig] (tested: 0.29)
+* http://www.curlpp.org/[curlpp] (tested: 0.8)
+* https://github.com/open-source-parsers/jsoncpp[jsoncpp] (tested: 1.8)
+
+==== Get sourcecode
+
+===== Releases
+
+Download the current release at
+https://schlomp.space/tastytea/gitea2rss/releases[schlomp.space].
+
+===== Development version
+
+[source,shellsession]
+----
+git clone https://schlomp.space/tastytea/gitea2rss.git
+----
+
+==== Compile
+
+[source,shellsession]
+----
+mkdir build
+cd build/
+cmake ..
+cmake --build .
+----
+
+.cmake options:
+* `-DCMAKE_BUILD_TYPE=Debug` for a debug build.
+
+Install with `make install`.
+
+== Copyright
+
+----
+Copyright © 2019 tastytea <tastytea@tastytea.de>.
+License GPLv3: GNU GPL version 3 <https://www.gnu.org/licenses/gpl-3.0.html>.
+This program comes with ABSOLUTELY NO WARRANTY. This is free software,
+and you are welcome to redistribute it under certain conditions.
+----

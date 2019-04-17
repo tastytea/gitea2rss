@@ -16,9 +16,19 @@ gitea2rss - Turns Gitea releases into RSS feeds.
 
 *gitea2rss* _URL of Gitea project_
 
+== DESCRIPTION
+
+gitea2rss fetches the releases from the Gitea API, converts the data into an RSS
+feed and dumps it to stdout. You can use cron to generate the feed at fixed
+internals.
+
 == EXAMPLES
 
-gitea2rss https://example.com/user/repo
+gitea2rss https://example.com/user/repo > repo.rss
+
+== SEE ALSO
+
+*crontab*(1) *crontab*(5)
 
 == REPORTING BUGS
 
