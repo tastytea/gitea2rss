@@ -22,9 +22,36 @@ gitea2rss fetches the releases from the Gitea API, converts the data into an RSS
 feed and dumps it to stdout. You can use cron to generate the feed at fixed
 internals.
 
+The generated RSS feed contains the *channel* elements _title_, _link_,
+_description_, _generator_ and _lastBuildDate_ and the *item* elements _title_,
+_link_, _guid_, _pubDate_ and _description_.
+
 == EXAMPLES
 
 gitea2rss https://example.com/user/repo > repo.rss
+
+=== Example rss feed
+
+----
+<rss version="2.0">
+  <channel>
+    <title>gitea2rss releases</title>
+    <link>https://schlomp.space/tastytea/gitea2rss</link>
+    <description>Releases of tastytea/gitea2rss</description>
+    <generator>gitea2rss 0.1.0</generator>
+    <lastBuildDate>Wed, 17 Apr 2019 05:07:25 +0200</lastBuildDate>
+    <item>
+      <title>gitea2rss: 0.1.0</title>
+      <link>https://schlomp.space/tastytea/gitea2rss/releases</link>
+      <guid isPermaLink="false">schlomp.space release 169</guid>
+      <pubDate>Wed, 17 Apr 2019 05:37:10 +0200</pubDate>
+      <description><![CDATA[<p><strong>Stable</strong></p><pre>
+First release. Everything works, as far as I can tell.
+</pre>]]></description>
+    </item>
+  </channel>
+</rss>
+----
 
 == SEE ALSO
 
