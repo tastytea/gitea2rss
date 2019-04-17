@@ -137,16 +137,14 @@ int main(int argc, char *argv[])
             "    <item>\n"
             "      <title>"
              << project << ": " << release["name"].asString() << "</title>\n"
-            "      <link>"
-             << baseurl << "/" << repo << "/releases/"
-             << release["id"].asString() << "</link>\n"
+            "      <link>" << baseurl << "/" << repo << "/releases</link>\n"
             "      <guid isPermaLink=\"false\">"
              << domain << " release " << release["id"].asString() << "</guid>\n"
             "      <pubDate>"
-             << strtime(release["published_at"].asString()) << "</pubDate>"
+             << strtime(release["published_at"].asString()) << "</pubDate>\n"
             "      <description><![CDATA[<p><strong>" << type << "</strong></p>"
-             << "<pre>" << release["body"].asString()
-             << "</pre>]]</description>\n";
+             << "<pre>\n" << release["body"].asString()
+             << "\n</pre>]]></description>\n";
 
         // for (const Json::Value &file : release["assets"])
         // {
