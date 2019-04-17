@@ -204,10 +204,10 @@ int main(int argc, char *argv[])
                    domain + " release " + release["id"].asString());
         write_line(6, "pubDate", strtime(release["published_at"].asString()));
         write_line(6, "description",
-                   "<![CDATA[<p><strong>" + type + "</strong></p><pre>\n"
-                   + release["body"].asString() + "\n"
-                   "      </pre><a href=\"" + release["tarball_url"].asString()
-                   + "\">Download tarball</a>" + "]]>");
+                   "\n        <![CDATA[<p><strong>" + type + "</strong></p>\n"
+                   "<pre>" + release["body"].asString() + "</pre>\n"
+                   "        <p><a href=\"" + release["tarball_url"].asString()
+                   + "\">Download tarball</a></p>" + "]]>\n      ");
         cout << "    </item>\n";
     }
 
