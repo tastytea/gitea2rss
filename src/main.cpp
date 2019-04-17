@@ -187,8 +187,9 @@ int main(int argc, char *argv[])
             "      <pubDate>"
              << strtime(release["published_at"].asString()) << "</pubDate>\n"
             "      <description><![CDATA[<p><strong>" << type << "</strong></p>"
-             << "<pre>\n" << release["body"].asString()
-             << "\n</pre>]]></description>\n";
+             << "<pre>\n" << release["body"].asString() << "\n"
+             << "      </pre><a href=\"" << release["tarball_url"].asString()
+             << "\">Download tarball</a>" << "]]></description>\n";
 
         cout << "    </item>\n";
     }
