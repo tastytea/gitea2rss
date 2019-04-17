@@ -23,6 +23,7 @@
 #include <ctime>
 #include <iomanip>
 #include <sstream>
+#include <cstdlib>
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Easy.hpp>
 #include <curlpp/Options.hpp>
@@ -100,15 +101,33 @@ const string strtime(const string &time)
 
 int main(int argc, char *argv[])
 {
-    if (argc < 2)
+    const char *envquery = std::getenv("QUERY_STRING");
+    string url;
+
+    if (envquery != nullptr)
+    {
+        const string query = envquery;
+        const char *envbaseurl = std::getenv("GITEA2RSS_BASEURL");
+        if (envbaseurl == nullptr)
+        {
+            return 1;
+        }
+        url = string(envbaseurl) + "/" + query.substr(query.find('=') + 1);
+        // cout << "Content-Type: application/rss+xml\n\n";
+        cout << "Content-Type: text/plain\n\n";
+    }
+    else if (argc < 2)
     {
         cerr << "usage: " << argv[0] << " URL of Gitea project\n";
         return 1;
     }
+    else
+    {
+        url = argv[1];
+    }
 
     curlpp::initialize();
 
-    string url = argv[1];
     size_t pos_repo = url.find('/', 8) + 1;
     const string baseurl = url.substr(0, pos_repo - 1);
     const string domain = baseurl.substr(baseurl.rfind('/') + 1);
