@@ -44,7 +44,6 @@ pipeline:
       - apt-get update -q
       - apt-get install -qy g++-6 cmake pkg-config
       - apt-get install -qy libcurl4-openssl-dev libjsoncpp-dev asciidoc
-      - apt-get install -qy dpkg-dev d-shlibs rpm file wget
       - apt-get install -qy -t sid libcurlpp-dev
       - rm -rf build && mkdir -p build && cd build
       - cmake -DCMAKE_INSTALL_PREFIX=/usr ..
