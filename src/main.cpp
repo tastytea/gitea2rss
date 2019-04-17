@@ -43,6 +43,8 @@ using std::chrono::system_clock;
 
 namespace curlopts = curlpp::options;
 
+bool cgi = false;
+
 // Fetch HTTP document.
 const string get_http(const string &url)
 {
@@ -67,7 +69,11 @@ const string get_http(const string &url)
         }
         else
         {
-            cerr << "HTTP error: " << std::to_string(ret) << endl;
+            if (cgi)
+            {
+                cout << "Status: " << std::to_string(ret) << endl;
+            }
+            cerr << "HTTP Error: " << std::to_string(ret) << endl;
         }
     }
     catch (const std::exception &e)
@@ -110,12 +116,21 @@ int main(int argc, char *argv[])
         const char *envbaseurl = std::getenv("GITEA2RSS_BASEURL");
         if (envbaseurl == nullptr)
         {
+            cout << "Status: 500 Internal Server Error\n\n";
             cerr << "Error: GITEA2RSS_BASEURL not set\n";
             return 1;
         }
+        cgi = true;
+
         const size_t pos = query.find("repo=");
+        if (pos == std::string::npos)
+        {
+            cout << "Status: 400 Bad Request\n\n";
+            return 1;
+        }
+
         url = string(envbaseurl) + "/" + query.substr(query.find('=', pos) + 1);
-        cout << "Content-Type: application/rss+xml\n\n";
+        cout << "Content-Type: application/rss+xml\n";
     }
     else if (argc < 2)
     {
@@ -144,6 +159,10 @@ int main(int argc, char *argv[])
     }
     Json::Value json;
     data >> json;
+    if (cgi)
+    {
+        cout << endl;
+    }
 
     cout <<
         "<rss version=\"2.0\">\n"
@@ -170,14 +189,6 @@ int main(int argc, char *argv[])
             "      <description><![CDATA[<p><strong>" << type << "</strong></p>"
              << "<pre>\n" << release["body"].asString()
              << "\n</pre>]]></description>\n";
-
-        // for (const Json::Value &file : release["assets"])
-        // {
-        //     cout << "      <enclosure "
-        //          << "url=\"" << file["browser_download_url"].asString()
-        //          << "\" length=\"" << file["size"].asString()
-        //          << "\" type=\"application/octet-stream\"" << "/>\n";
-        // }
 
         cout << "    </item>\n";
     }
