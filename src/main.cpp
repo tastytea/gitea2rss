@@ -110,9 +110,10 @@ int main(int argc, char *argv[])
         const char *envbaseurl = std::getenv("GITEA2RSS_BASEURL");
         if (envbaseurl == nullptr)
         {
+            cerr << "Error: GITEA2RSS_BASEURL not set\n";
             return 1;
         }
-        size_t pos = query.find("repo=");
+        const size_t pos = query.find("repo=");
         url = string(envbaseurl) + "/" + query.substr(query.find('=', pos) + 1);
         cout << "Content-Type: application/rss+xml\n\n";
     }
@@ -136,6 +137,11 @@ int main(int argc, char *argv[])
     const string now = strtime(system_clock::now());
     stringstream data(get_http(baseurl + "/api/v1/repos/"
                                + repo + "/releases"));
+    if (data.str().empty())
+    {
+        cerr << "Error: Could not download releases.\n";
+        return 2;
+    }
     Json::Value json;
     data >> json;
 
