@@ -33,6 +33,8 @@ emerge -a dev-util/gitea2rss
 * https://pkgconfig.freedesktop.org/wiki/[pkgconfig] (tested: 0.29)
 * http://www.curlpp.org/[curlpp] (tested: 0.8)
 * https://github.com/open-source-parsers/jsoncpp[jsoncpp] (tested: 1.8)
+* Optional:
+** Manpage: http://asciidoc.org/[asciidoc] (tested: 8.6)
 
 ==== Get sourcecode
 
