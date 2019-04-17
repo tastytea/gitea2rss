@@ -83,7 +83,7 @@ https://git.example.com/user/repo
 
 == SEE ALSO
 
-*crontab*(1) *crontab*(5) *curl*(1)
+*crontab*(1), *crontab*(5), *curl*(1)
 
 == REPORTING BUGS
 
