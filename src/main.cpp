@@ -19,6 +19,8 @@
 #include <sstream>
 #include <exception>
 #include <cstdint>
+#include <chrono>
+#include <ctime>
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Easy.hpp>
 #include <curlpp/Options.hpp>
@@ -34,9 +36,11 @@ using std::string;
 using std::ostringstream;
 using std::stringstream;
 using std::uint16_t;
+using std::chrono::system_clock;
 
 namespace curlopts = curlpp::options;
 
+// Fetch HTTP document.
 const string get_http(const string &url)
 {
     string answer;
@@ -71,6 +75,18 @@ const string get_http(const string &url)
     return answer;
 }
 
+// RFC 822 compliant time string.
+const string strtime(const system_clock::time_point &timepoint)
+{
+    constexpr uint16_t bufsize = 1024;
+    std::time_t time = system_clock::to_time_t(timepoint);
+    std::tm *timeinfo;
+    timeinfo = std::localtime(&time);
+    char buffer[bufsize];
+    std::strftime(buffer, bufsize, "%a, %d %b %Y %T %z", timeinfo);
+    return static_cast<const string>(buffer);
+}
+
 int main(int argc, char *argv[])
 {
     if (argc < 2)
@@ -84,17 +100,54 @@ int main(int argc, char *argv[])
     string url = argv[1];
     size_t pos_repo = url.find('/', 8) + 1;
     const string baseurl = url.substr(0, pos_repo - 1);
+    const string domain = baseurl.substr(baseurl.rfind('/') + 1);
     const string repo = url.substr(pos_repo);
-
+    const string project = repo.substr(repo.find('/') + 1);
+    const string now = strtime(system_clock::now());
     stringstream data(get_http(baseurl + "/api/v1/repos/"
                                + repo + "/releases"));
     Json::Value json;
     data >> json;
+
+    cout <<
+        "<rss version=\"2.0\">\n"
+        "  <channel>\n"
+        "    <title>" << project << " releases</title>\n"
+        "    <link>" << url << "</link>\n"
+        "    <description>Releases of " << repo << "</description>\n"
+        "    <generator>gitea2rss " << global::version << "</generator>\n"
+        "    <lastBuildDate>" << now << "</lastBuildDate>\n";
+
     for (const Json::Value &release : json)
     {
-        cout << release["name"] << endl;
-        // cout << release["body"] << endl;
+        const bool prerelease = release["prerelease"].asBool();
+        const string type = (prerelease ? "Pre-Release" : "Stable");
+        cout <<
+            "    <item>\n"
+            "      <title>"
+             << project << ": " << release["name"].asString() << "</title>\n"
+            "      <link>"
+             << baseurl << "/" << repo << "/releases/"
+             << release["id"].asString() << "</link>\n"
+            "      <guid isPermaLink=\"false\">"
+             << domain << " release " << release["id"].asString() << "</guid>\n"
+            "      <description>" << type << "\n\n"
+             << release["body"].asString() << "</description>\n";
+
+        // for (const Json::Value &file : release["assets"])
+        // {
+        //     cout << "      <enclosure "
+        //          << "url=\"" << file["browser_download_url"].asString()
+        //          << "\" length=\"" << file["size"].asString()
+        //          << "\" type=\"application/octet-stream\"" << "/>\n";
+        // }
+
+        cout << "    </item>\n";
     }
+
+    cout <<
+        "  </channel>\n"
+        "</rss>\n";
 
     return 0;
 }
