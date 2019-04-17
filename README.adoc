@@ -2,6 +2,8 @@
 
 *gitea2rss* turns https://gitea.io[Gitea] releases into RSS feeds.
 
+https://rss.schlomp.space/tastytea/gitea2rss.rss[Subscribe to gitea2rss releases].
+
 == Usage
 
 See https://schlomp.space/tastytea/gitea2rss/src/branch/master/gitea2rss.1.adoc[manpage].
