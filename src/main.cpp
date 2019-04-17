@@ -21,6 +21,8 @@
 #include <cstdint>
 #include <chrono>
 #include <ctime>
+#include <iomanip>
+#include <sstream>
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Easy.hpp>
 #include <curlpp/Options.hpp>
@@ -75,7 +77,7 @@ const string get_http(const string &url)
     return answer;
 }
 
-// RFC 822 compliant time string.
+// Convert time_point to RFC 822 compliant time string.
 const string strtime(const system_clock::time_point &timepoint)
 {
     constexpr uint16_t bufsize = 1024;
@@ -85,6 +87,15 @@ const string strtime(const system_clock::time_point &timepoint)
     char buffer[bufsize];
     std::strftime(buffer, bufsize, "%a, %d %b %Y %T %z", timeinfo);
     return static_cast<const string>(buffer);
+}
+
+// Convert ISO 8601 time string to RFC 822 time string.
+const string strtime(const string &time)
+{
+    std::tm tm = {};
+    std::stringstream ss(time);
+    ss >> std::get_time(&tm, "%Y-%m-%dT%T%z");
+    return strtime(std::chrono::system_clock::from_time_t(std::mktime(&tm)));
 }
 
 int main(int argc, char *argv[])
@@ -131,8 +142,11 @@ int main(int argc, char *argv[])
              << release["id"].asString() << "</link>\n"
             "      <guid isPermaLink=\"false\">"
              << domain << " release " << release["id"].asString() << "</guid>\n"
-            "      <description>" << type << "\n\n"
-             << release["body"].asString() << "</description>\n";
+            "      <pubDate>"
+             << strtime(release["published_at"].asString()) << "</pubDate>"
+            "      <description><![CDATA[<p><strong>" << type << "</strong></p>"
+             << "<pre>" << release["body"].asString()
+             << "</pre>]]</description>\n";
 
         // for (const Json::Value &file : release["assets"])
         // {
