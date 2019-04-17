@@ -46,7 +46,7 @@ releases.
 
 gitea2rss https://git.example.com/user/repo > repo.rss
 
-=== Example rss feed
+=== Example RSS feed
 
 ----
 <rss version="2.0">
