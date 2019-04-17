@@ -50,10 +50,10 @@ variables. See *curl*(1), section _ENVIRONMENT_.
 
 == EXAMPLES
 
-gitea2rss https://git.example.com/user/repo > repo.rss
+`gitea2rss https://git.example.com/user/repo > repo.rss`
 
-https_proxy="socks4a://user:pass@127.0.0.1:9050/" gitea2rss
-https://git.example.com/user/repo
+`https_proxy="socks4a://user:pass@127.0.0.1:9050/" gitea2rss
+https://git.example.com/user/repo`
 
 === Example RSS feed
 
