@@ -42,9 +42,17 @@ _link_, _guid_, _pubDate_ and _description_. Since Gitea has no individual pages
 for each release, _link_ elements in *item* are set to the overview page for
 releases.
 
+== PROXY SERVERS
+
+Since gitea2rss is built on libcurl, it respects the same proxy environment
+variables. See *curl*(1), section _ENVIRONMENT_.
+
 == EXAMPLES
 
-gitea2rss https://git.example.com/user/repo > repo.rss
+`gitea2rss https://git.example.com/user/repo > repo.rss`
+
+`https_proxy="socks4a://user:pass@127.0.0.1:9050/" gitea2rss
+https://git.example.com/user/repo`
 
 === Example RSS feed
 
@@ -73,7 +81,7 @@ gitea2rss https://git.example.com/user/repo > repo.rss
 
 == SEE ALSO
 
-*crontab*(1) *crontab*(5)
+*crontab*(1) *crontab*(5) *curl*(1)
 
 == REPORTING BUGS
 
