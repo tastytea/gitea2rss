@@ -38,6 +38,7 @@ using std::endl;
 using std::string;
 using std::ostringstream;
 using std::stringstream;
+using std::uint8_t;
 using std::uint16_t;
 using std::chrono::system_clock;
 
@@ -103,6 +104,25 @@ const string strtime(const string &time)
     std::stringstream ss(time);
     ss >> std::get_time(&tm, "%Y-%m-%dT%T%z");
     return strtime(std::chrono::system_clock::from_time_t(std::mktime(&tm)));
+}
+
+void write_line(const uint8_t spaces, const string &tag, const string &value)
+{
+    string endtag;
+    // If there is a space in the tag, use only the part up until the space for
+    // the ending tag.
+    const size_t pos = tag.find(' ');
+    if (pos == std::string::npos)
+    {
+        endtag = tag;
+    }
+    else
+    {
+        endtag = tag.substr(0, pos);
+    }
+
+    cout << std::string(spaces, ' ');
+    cout << '<' << tag << '>' << value << "</" << endtag << ">\n";
 }
 
 int main(int argc, char *argv[])
@@ -177,20 +197,17 @@ int main(int argc, char *argv[])
     {
         const bool prerelease = release["prerelease"].asBool();
         const string type = (prerelease ? "Pre-Release" : "Stable");
-        cout <<
-            "    <item>\n"
-            "      <title>"
-             << project << ": " << release["name"].asString() << "</title>\n"
-            "      <link>" << baseurl << "/" << repo << "/releases</link>\n"
-            "      <guid isPermaLink=\"false\">"
-             << domain << " release " << release["id"].asString() << "</guid>\n"
-            "      <pubDate>"
-             << strtime(release["published_at"].asString()) << "</pubDate>\n"
-            "      <description><![CDATA[<p><strong>" << type << "</strong></p>"
-             << "<pre>\n" << release["body"].asString() << "\n"
-             << "      </pre><a href=\"" << release["tarball_url"].asString()
-             << "\">Download tarball</a>" << "]]></description>\n";
-
+        cout << "    <item>\n";
+        write_line(6, "title", project + ": " + release["name"].asString());
+        write_line(6, "link", baseurl + "/" + repo + "/releases");
+        write_line(6, "guid isPermaLink=\"false\"",
+                   domain + " release " + release["id"].asString());
+        write_line(6, "pubDate", strtime(release["published_at"].asString()));
+        write_line(6, "description",
+                   "<![CDATA[<p><strong>" + type + "</strong></p><pre>\n"
+                   + release["body"].asString() + "\n"
+                   "      </pre><a href=\"" + release["tarball_url"].asString()
+                   + "\">Download tarball</a>" + "]]>");
         cout << "    </item>\n";
     }
 
