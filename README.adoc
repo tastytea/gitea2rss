@@ -28,7 +28,7 @@ emerge -a dev-util/gitea2rss
 ==== Dependencies
 
 * Tested OS: Linux
-* C++ compiler (tested: https://gcc.gnu.org/[gcc] 8
+* C++ compiler (tested: https://gcc.gnu.org/[gcc] 8)
 * https://cmake.org/[cmake] (at least: 3.6)
 * https://pkgconfig.freedesktop.org/wiki/[pkgconfig] (tested: 0.29)
 * http://www.curlpp.org/[curlpp] (tested: 0.8)
