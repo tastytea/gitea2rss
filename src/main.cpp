@@ -172,6 +172,10 @@ int main(int argc, char *argv[])
     const string now = strtime(system_clock::now());
     stringstream data(get_http(baseurl + "/api/v1/repos/"
                                + repo + "/releases"));
+    if (cgi)
+    {
+        cout << endl;
+    }
     if (data.str().empty())
     {
         cerr << "Error: Could not download releases.\n";
@@ -179,10 +183,6 @@ int main(int argc, char *argv[])
     }
     Json::Value json;
     data >> json;
-    if (cgi)
-    {
-        cout << endl;
-    }
 
     cout <<
         "<rss version=\"2.0\">\n"
