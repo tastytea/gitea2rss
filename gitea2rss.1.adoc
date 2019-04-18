@@ -42,7 +42,11 @@ this in it:
 
 [source,html]
 ----
-{{if .Repository.Name}}<link rel="alternate" type="application/rss+xml" title="Releases of {{.Repository.Name}}" href="https://rss.example.com/?repo={{.Repository.Owner.Name}}/{{.Repository.Name}}" />{{end}}
+{{if .Repository.Name}}
+<link rel="alternate" type="application/rss+xml"
+      title="Releases of {{.Repository.Name}}"
+      href="https://rss.example.com/?repo={{.Repository.Owner.Name}}/{{.Repository.Name}}"/>
+{{end}}
 ----
 
 == PROXY SERVERS
