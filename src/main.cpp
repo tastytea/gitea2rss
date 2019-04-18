@@ -90,10 +90,10 @@ const string strtime(const system_clock::time_point &timepoint)
 {
     constexpr uint16_t bufsize = 1024;
     std::time_t time = system_clock::to_time_t(timepoint);
-    std::tm *timeinfo;
-    timeinfo = std::localtime(&time);
+    std::tm *tm;
+    tm = std::gmtime(&time);
     char buffer[bufsize];
-    std::strftime(buffer, bufsize, "%a, %d %b %Y %T %z", timeinfo);
+    std::strftime(buffer, bufsize, "%a, %d %b %Y %T %z", tm);
     return static_cast<const string>(buffer);
 }
 
@@ -101,9 +101,10 @@ const string strtime(const system_clock::time_point &timepoint)
 const string strtime(const string &time)
 {
     std::tm tm = {};
+    tm.tm_isdst = -1;           // Detect daylight saving time.
     std::stringstream ss(time);
-    ss >> std::get_time(&tm, "%Y-%m-%dT%T%z");
-    return strtime(std::chrono::system_clock::from_time_t(std::mktime(&tm)));
+    ss >> std::get_time(&tm, "%Y-%m-%dT%T"); // Assume time is UTC.
+    return strtime(std::chrono::system_clock::from_time_t(timegm(&tm)));
 }
 
 void write_line(const uint8_t spaces, const string &tag, const string &value)
