@@ -4,6 +4,9 @@ project(gitea2rss
   LANGUAGES CXX
 )
 
+set(WITH_MAN "YES" CACHE STRING "WITH_MAN defaults to \"YES\"")
+set(WITH_TESTS "NO" CACHE STRING "WITH_TESTS defaults to \"NO\"")
+
 include(GNUInstallDirs)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(CURLPP REQUIRED curlpp)
@@ -17,7 +20,7 @@ set(CMAKE_CXX_FLAGS_DEBUG
   "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wpedantic -ftrapv \
 -fsanitize=undefined -g -Og -fno-omit-frame-pointer")
 
-include_directories(${PROJECT_BINARY_DIR})
+Include_directories(${PROJECT_BINARY_DIR})
 
 include_directories(${CURLPP_INCLUDE_DIRS})
 include_directories(${JSONCPP_INCLUDE_DIRS})
@@ -36,7 +39,6 @@ add_executable(${PROJECT_NAME} "${sources}")
 target_link_libraries(${PROJECT_NAME} ${CURLPP_LIBRARIES} ${JSONCPP_LIBRARIES})
 install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-set(WITH_MAN "YES" CACHE STRING "WITH_MAN defaults to \"YES\"")
 if (WITH_MAN)
   add_custom_command(
     OUTPUT "${PROJECT_BINARY_DIR}/${PROJECT_NAME}.1"
@@ -48,4 +50,8 @@ if (WITH_MAN)
   install(
     FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.1
     DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
+endif()
+
+if(WITH_TESTS)
+  include(tests.CMakeLists.txt)
 endif()
