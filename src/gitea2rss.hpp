@@ -41,7 +41,10 @@ const string strtime(const string &time);
 void write_line(const uint8_t spaces, const string &tag, const string &value);
 
 //! Write releases.
-uint8_t releases(const string &url);
+uint8_t write_releases(const string &url);
+
+//! Write tags.
+uint8_t write_tags(const string &url);
 
 //! @brief Get the base URL, without trailing slash.
 const string get_baseurl(const string &url);

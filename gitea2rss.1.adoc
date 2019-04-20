@@ -2,7 +2,7 @@
 :doctype:       manpage
 :Author:        tastytea
 :Email:         tastytea@tastytea.de
-:Date:          2019-04-18
+:Date:          2019-04-20
 :Revision:      0.0.0
 :man source:    gitea2rss
 :man version:   {revision}
@@ -14,19 +14,22 @@ gitea2rss - Generates RSS feeds from Gitea releases.
 
 == SYNOPSIS
 
-*gitea2rss* _URL of Gitea project_
+*gitea2rss* _URL of Gitea project_ [_releases_|_tags_]
 
 == DESCRIPTION
 
-gitea2rss fetches the releases from the Gitea API, converts the data into an RSS
-feed and dumps it to stdout. You can use it as a CGI script to generate the
-feeds dynamically or simply use cron to generate the feeds at fixed intervals.
+gitea2rss fetches the releases (default) or tags from the Gitea API,
+converts the data into an RSS feed and dumps it to stdout. You can use it as a
+CGI script to generate the feeds dynamically or simply use cron to generate the
+feeds at fixed intervals.
 
 If you want to use gitea2rss as a CGI script, you have to set
 *GITEA2RSS_BASEURL* to the basis URL of your instance, without the trailing
 slash. For example: _https://git.example.com_. The *QUERY_STRING* must contain
 _repo=user/project_. The feed-URL for alice's project, cooltool, would be:
-`https://rss.example.com/?repo=alice/cooltool`.
+`https://rss.example.com/?repo=alice/cooltool`. You can select the type of the
+feed by appending `&type=` at the end of the URL. For example:
+`https://rss.example.com/?repo=alice/cooltool&type=tags`.
 
 The generated RSS feed contains the *channel* elements _title_, _link_,
 _description_, _generator_ and _lastBuildDate_ and the *item* elements _title_,
@@ -46,6 +49,9 @@ this in it:
 <link rel="alternate" type="application/rss+xml"
       title="Releases of {{.Repository.Name}}"
       href="https://rss.example.com/?repo={{.Repository.Owner.Name}}/{{.Repository.Name}}"/>
+<link rel="alternate" type="application/rss+xml"
+      title="Tags of {{.Repository.Name}}"
+      href="https://rss.example.com/?repo={{.Repository.Owner.Name}}/{{.Repository.Name}}&type=tags"/>
 {{end}}
 ----
 
@@ -56,7 +62,7 @@ variables. See *curl*(1), section _ENVIRONMENT_.
 
 == EXAMPLES
 
-`gitea2rss https://git.example.com/user/project > repo.rss`
+`gitea2rss https://git.example.com/user/project tags > repo.rss`
 
 `https_proxy="socks4a://user:pass@localhost:9050/" gitea2rss
 https://git.example.com/user/project`

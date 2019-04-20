@@ -89,20 +89,23 @@ int main(int argc, char *argv[])
         cout << endl;
     }
 
-    const string now = strtime(system_clock::now());
+    cout << "<rss version=\"2.0\">\n"
+        "  <channel>\n";
 
-    cout <<
-        "<rss version=\"2.0\">\n"
-        "  <channel>\n"
-        "    <title>" << get_project(url) << " " << type << "</title>\n"
-        "    <link>" << url << "</link>\n"
-        "    <generator>gitea2rss " << global::version << "</generator>\n"
-        "    <lastBuildDate>" << now << "</lastBuildDate>\n";
+    write_line(4, "title", get_project(url) + " " + type);
+    write_line(4, "link", url);
+    write_line(4, "description", "List of " + type + " of " + get_repo(url));
+    write_line(4, "generator", string("gitea2rss ") + global::version);
+    write_line(4, "lastBuildDate", strtime(system_clock::now()));
 
     uint8_t ret = 0;
     if (type == "releases")
     {
-        ret = releases(url);
+        ret = write_releases(url);
+    }
+    else if (type == "tags")
+    {
+        ret = write_tags(url);
     }
 
     if (ret != 0)
@@ -110,8 +113,7 @@ int main(int argc, char *argv[])
         return ret;
     }
 
-    cout <<
-        "  </channel>\n"
+    cout << "  </channel>\n"
         "</rss>\n";
 
     curlpp::terminate();

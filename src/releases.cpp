@@ -23,7 +23,7 @@ using std::cout;
 using std::cerr;
 using std::stringstream;
 
-uint8_t releases(const string &url)
+uint8_t write_releases(const string &url)
 {
     const string baseurl = get_baseurl(url);
     const string repo = get_repo(url);
@@ -43,8 +43,10 @@ uint8_t releases(const string &url)
     {
         const bool prerelease = release["prerelease"].asBool();
         const string type = (prerelease ? "Pre-Release" : "Stable");
+
         cout << "    <item>\n";
-        write_line(6, "title", get_project(url) + ": " + release["name"].asString());
+        write_line(6, "title", get_project(url) + ": "
+                   + release["name"].asString());
         write_line(6, "link", baseurl + "/" + repo + "/releases");
         write_line(6, "guid isPermaLink=\"false\"",
                    get_domain(url) + " release " + release["id"].asString());
@@ -53,7 +55,7 @@ uint8_t releases(const string &url)
                    "\n        <![CDATA[<p><strong>" + type + "</strong></p>\n"
                    "<pre>" + release["body"].asString() + "</pre>\n"
                    "        <p><a href=\"" + release["tarball_url"].asString()
-                   + "\">Download tarball</a></p>" + "]]>\n      ");
+                   + "\">Download tarball</a></p>]]>\n      ");
         cout << "    </item>\n";
     }
 
