@@ -14,8 +14,35 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define CATCH_CONFIG_MAIN
-
+#include <string>
+#include <chrono>
 #include <catch.hpp>
-#include "strings.cpp"
-#include "time.cpp"
+#include "gitea2rss.hpp"
+
+using std::string;
+
+SCENARIO ("strtime() works as expected", "[time]")
+{
+    GIVEN ("Time as time_point")
+    {
+        std::chrono::system_clock::time_point tp;
+        const string time
+            = strtime(tp);
+
+        THEN ("The time is returned in the correct format")
+        {
+            REQUIRE(time == "Thu, 01 Jan 1970 00:00:00 +0000");
+        }
+    }
+
+    GIVEN ("Time as ISO 8601 string")
+    {
+        const string time
+            = strtime("1970-01-01T00:00:00+0000");
+
+        THEN ("The time is returned in the correct format")
+        {
+            REQUIRE(time == "Thu, 01 Jan 1970 00:00:00 +0000");
+        }
+    }
+}
