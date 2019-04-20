@@ -14,28 +14,28 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include "version.hpp"
 #include "gitea2rss.hpp"
 
-using std::cout;
-
-void write_line(const uint8_t spaces, const string &tag, const string &value)
+const string get_project(const string &url)
 {
-    string endtag;
-    // If there is a space in the tag, use only the part up until the space for
-    // the ending tag.
-    const size_t pos = tag.find(' ');
-    if (pos == std::string::npos)
-    {
-        endtag = tag;
-    }
-    else
-    {
-        endtag = tag.substr(0, pos);
-    }
-
-    cout << std::string(spaces, ' ');
-    cout << '<' << tag << '>' << value << "</" << endtag << ">\n";
+    const string repo = get_repo(url);
+    return repo.substr(repo.find('/') + 1);
 }
 
+const string get_baseurl(const string &url)
+{
+    const size_t pos = url.find('/', 8) + 1;
+    return url.substr(0, pos - 1);
+}
+
+const string get_repo(const string &url)
+{
+    const size_t pos = url.find('/', 8) + 1;
+    return url.substr(pos);
+}
+
+const string get_domain(const string &url)
+{
+    const string baseurl = get_baseurl(url);
+    return baseurl.substr(baseurl.rfind('/') + 1);
+}

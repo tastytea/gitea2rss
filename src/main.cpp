@@ -16,18 +16,14 @@
 
 #include <iostream>
 #include <string>
-#include <sstream>
 #include <cstdlib>
 #include <curlpp/cURLpp.hpp>
-#include <jsoncpp/json/json.h>
 #include "version.hpp"
 #include "gitea2rss.hpp"
 
 using std::cout;
 using std::cerr;
-using std::endl;
 using std::string;
-using std::stringstream;
 using std::chrono::system_clock;
 
 bool cgi = false;
@@ -71,51 +67,21 @@ int main(int argc, char *argv[])
         url = argv[1];
     }
 
-    size_t pos_repo = url.find('/', 8) + 1;
-    const string baseurl = url.substr(0, pos_repo - 1);
-    const string domain = baseurl.substr(baseurl.rfind('/') + 1);
-    const string repo = url.substr(pos_repo);
-    const string project = repo.substr(repo.find('/') + 1);
     const string now = strtime(system_clock::now());
-    stringstream data(get_http(baseurl + "/api/v1/repos/"
-                               + repo + "/releases"));
-    if (cgi)
-    {
-        cout << endl;
-    }
-    if (data.str().empty())
-    {
-        cerr << "Error: Could not download releases.\n";
-        return 2;
-    }
-    Json::Value json;
-    data >> json;
 
     cout <<
         "<rss version=\"2.0\">\n"
         "  <channel>\n"
-        "    <title>" << project << " releases</title>\n"
+        "    <title>" << get_project(url) << " releases</title>\n"
         "    <link>" << url << "</link>\n"
-        "    <description>Releases of " << repo << "</description>\n"
+        "    <description>Releases of " << get_repo(url) << "</description>\n"
         "    <generator>gitea2rss " << global::version << "</generator>\n"
         "    <lastBuildDate>" << now << "</lastBuildDate>\n";
 
-    for (const Json::Value &release : json)
+    uint8_t ret = releases(url);
+    if (ret != 0)
     {
-        const bool prerelease = release["prerelease"].asBool();
-        const string type = (prerelease ? "Pre-Release" : "Stable");
-        cout << "    <item>\n";
-        write_line(6, "title", project + ": " + release["name"].asString());
-        write_line(6, "link", baseurl + "/" + repo + "/releases");
-        write_line(6, "guid isPermaLink=\"false\"",
-                   domain + " release " + release["id"].asString());
-        write_line(6, "pubDate", strtime(release["published_at"].asString()));
-        write_line(6, "description",
-                   "\n        <![CDATA[<p><strong>" + type + "</strong></p>\n"
-                   "<pre>" + release["body"].asString() + "</pre>\n"
-                   "        <p><a href=\"" + release["tarball_url"].asString()
-                   + "\">Download tarball</a></p>" + "]]>\n      ");
-        cout << "    </item>\n";
+        return ret;
     }
 
     cout <<

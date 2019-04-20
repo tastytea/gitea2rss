@@ -40,4 +40,15 @@ const string strtime(const string &time);
 //! Write line of XML.
 void write_line(const uint8_t spaces, const string &tag, const string &value);
 
+//! Write releases.
+uint8_t releases(const string &url);
+
+const string get_baseurl(const string &url);
+
+const string get_project(const string &url);
+
+const string get_repo(const string &url);
+
+const string get_domain(const string &url);
+
 #endif  // GITEA2RSS_HPP
