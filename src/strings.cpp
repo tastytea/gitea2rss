@@ -16,16 +16,16 @@
 
 #include "gitea2rss.hpp"
 
-const string get_project(const string &url)
-{
-    const string repo = get_repo(url);
-    return repo.substr(repo.find('/') + 1);
-}
-
 const string get_baseurl(const string &url)
 {
-    const size_t pos = url.find('/', 8) + 1;
-    return url.substr(0, pos - 1);
+    const size_t pos = url.find('/', 8);
+    return url.substr(0, pos);
+}
+
+const string get_domain(const string &url)
+{
+    const string baseurl = get_baseurl(url);
+    return baseurl.substr(baseurl.rfind('/') + 1);
 }
 
 const string get_repo(const string &url)
@@ -34,8 +34,8 @@ const string get_repo(const string &url)
     return url.substr(pos);
 }
 
-const string get_domain(const string &url)
+const string get_project(const string &url)
 {
-    const string baseurl = get_baseurl(url);
-    return baseurl.substr(baseurl.rfind('/') + 1);
+    const string repo = get_repo(url);
+    return repo.substr(repo.find('/') + 1);
 }

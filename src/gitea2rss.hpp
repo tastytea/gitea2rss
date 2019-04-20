@@ -43,12 +43,16 @@ void write_line(const uint8_t spaces, const string &tag, const string &value);
 //! Write releases.
 uint8_t releases(const string &url);
 
+//! @brief Get the base URL, without trailing slash.
 const string get_baseurl(const string &url);
 
-const string get_project(const string &url);
+//! Get the domain name.
+const string get_domain(const string &url);
 
+//! Get the full name of the repo (user/project).
 const string get_repo(const string &url);
 
-const string get_domain(const string &url);
+//! Get the project name.
+const string get_project(const string &url);
 
 #endif  // GITEA2RSS_HPP
