@@ -56,7 +56,11 @@ uint8_t write_tags(const string &url)
                    get_domain(url) + " tag " + sha);
         write_line(6, "description",
                    "\n        <![CDATA[<p><strong>" + name + "</strong> "
-                   "with checksum " + sha + "</p>]]>\n      ");
+                   "with checksum " + sha + "</p>\n"
+                   "        <p><a href=\""
+                   + baseurl + "/" + repo + "/archive/" + name + ".tar.gz"
+                   + "\">Download tarball</a></p>]]>\n      ");
+
         cout << "    </item>\n";
     }
 
