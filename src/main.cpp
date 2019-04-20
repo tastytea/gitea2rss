@@ -23,6 +23,7 @@
 
 using std::cout;
 using std::cerr;
+using std::endl;
 using std::string;
 using std::chrono::system_clock;
 
@@ -32,6 +33,7 @@ int main(int argc, char *argv[])
 {
     const char *envquery = std::getenv("QUERY_STRING");
     string url;
+    string type = "releases";
 
     curlpp::initialize();
 
@@ -47,14 +49,25 @@ int main(int argc, char *argv[])
         }
         cgi = true;
 
-        const size_t pos = query.find("repo=");
-        if (pos == std::string::npos)
+        // Look for repo in QUERY_STRING.
+        size_t pos_found = query.find("repo=");
+        if (pos_found == std::string::npos)
         {
             cout << "Status: 400 Bad Request\n\n";
             return 1;
         }
+        const size_t pos_repo = pos_found + 5;
+        const size_t pos_endrepo = query.find('&', pos_repo) - pos_repo;
+        url = string(envbaseurl) + "/" + query.substr(pos_repo, pos_endrepo);
 
-        url = string(envbaseurl) + "/" + query.substr(query.find('=', pos) + 1);
+        // Look for type in QUERY_STRING.
+        pos_found = query.find("type=");
+        if (pos_found != std::string::npos)
+        {
+            const size_t pos_type = pos_found + 5;
+            type = query.substr(pos_type, query.find('&') - pos_type);
+        }
+
         cout << "Content-Type: application/rss+xml\n";
     }
     else if (argc < 2)
@@ -65,6 +78,15 @@ int main(int argc, char *argv[])
     else
     {
         url = argv[1];
+        if (argc > 2)
+        {
+            type = argv[2];
+        }
+    }
+
+    if (cgi)
+    {
+        cout << endl;
     }
 
     const string now = strtime(system_clock::now());
@@ -72,13 +94,17 @@ int main(int argc, char *argv[])
     cout <<
         "<rss version=\"2.0\">\n"
         "  <channel>\n"
-        "    <title>" << get_project(url) << " releases</title>\n"
+        "    <title>" << get_project(url) << " " << type << "</title>\n"
         "    <link>" << url << "</link>\n"
-        "    <description>Releases of " << get_repo(url) << "</description>\n"
         "    <generator>gitea2rss " << global::version << "</generator>\n"
         "    <lastBuildDate>" << now << "</lastBuildDate>\n";
 
-    uint8_t ret = releases(url);
+    uint8_t ret = 0;
+    if (type == "releases")
+    {
+        ret = releases(url);
+    }
+
     if (ret != 0)
     {
         return ret;

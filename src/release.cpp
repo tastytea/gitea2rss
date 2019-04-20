@@ -21,20 +21,15 @@
 
 using std::cout;
 using std::cerr;
-using std::endl;
 using std::stringstream;
 
 uint8_t releases(const string &url)
 {
     const string baseurl = get_baseurl(url);
     const string repo = get_repo(url);
-
     stringstream data(get_http(baseurl + "/api/v1/repos/"
                                + repo + "/releases"));
-    if (cgi)
-    {
-        cout << endl;
-    }
+
     if (data.str().empty())
     {
         cerr << "Error: Could not download releases.\n";
