@@ -21,6 +21,7 @@
 
 using std::cout;
 using std::cerr;
+using std::endl;
 using std::stringstream;
 
 uint8_t write_releases(const string &url)
@@ -30,11 +31,17 @@ uint8_t write_releases(const string &url)
     stringstream data(get_http(baseurl + "/api/v1/repos/"
                                + repo + "/releases"));
 
+    if (cgi)
+    {
+        cout << endl;
+    }
     if (data.str().empty())
     {
         cerr << "Error: Could not download releases.\n";
         return 2;
     }
+
+    write_preamble(url, "releases");
 
     Json::Value json;
     data >> json;

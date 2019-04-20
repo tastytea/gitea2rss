@@ -40,6 +40,9 @@ const string strtime(const string &time);
 //! Write line of XML.
 void write_line(const uint8_t spaces, const string &tag, const string &value);
 
+//! Write the RSS preamble and channel data.
+void write_preamble(const string &url, const string &type);
+
 //! Write releases.
 uint8_t write_releases(const string &url);
 

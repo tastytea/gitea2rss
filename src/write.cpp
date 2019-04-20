@@ -39,3 +39,14 @@ void write_line(const uint8_t spaces, const string &tag, const string &value)
     cout << '<' << tag << '>' << value << "</" << endtag << ">\n";
 }
 
+void write_preamble(const string &url, const string &type)
+{
+    cout << "<rss version=\"2.0\">\n"
+        "  <channel>\n";
+
+    write_line(4, "title", get_project(url) + " " + type);
+    write_line(4, "link", url);
+    write_line(4, "description", "List of " + type + " of " + get_repo(url));
+    write_line(4, "generator", string("gitea2rss ") + global::version);
+    write_line(4, "lastBuildDate", strtime(system_clock::now()));
+}

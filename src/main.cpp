@@ -84,20 +84,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (cgi)
-    {
-        cout << endl;
-    }
-
-    cout << "<rss version=\"2.0\">\n"
-        "  <channel>\n";
-
-    write_line(4, "title", get_project(url) + " " + type);
-    write_line(4, "link", url);
-    write_line(4, "description", "List of " + type + " of " + get_repo(url));
-    write_line(4, "generator", string("gitea2rss ") + global::version);
-    write_line(4, "lastBuildDate", strtime(system_clock::now()));
-
     uint8_t ret = 0;
     if (type == "releases")
     {

@@ -41,13 +41,15 @@ const string get_http(const string &url)
     {
         ostringstream oss;
         curlpp::Easy request;
-        request.setOpt<curlopts::Url>(url);
+
         request.setOpt<curlopts::UserAgent>(string("gitea2rss/")
                                             + global::version);
         request.setOpt<curlopts::HttpHeader>({ "Connection: close" });
         request.setOpt<curlopts::FollowLocation>(true);
+        request.setOpt<curlopts::Url>(url);
         request.setOpt<curlopts::WriteStream>(&oss);
         request.perform();
+
         uint16_t ret = curlpp::infos::ResponseCode::get(request);
         if (ret == 200 || ret == 302 || ret == 307
             || ret == 301 || ret == 308)
