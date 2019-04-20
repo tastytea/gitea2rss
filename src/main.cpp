@@ -17,119 +17,27 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include <exception>
-#include <cstdint>
-#include <chrono>
-#include <ctime>
-#include <iomanip>
-#include <sstream>
 #include <cstdlib>
 #include <curlpp/cURLpp.hpp>
-#include <curlpp/Easy.hpp>
-#include <curlpp/Options.hpp>
-#include <curlpp/Exception.hpp>
-#include <curlpp/Infos.hpp>
 #include <jsoncpp/json/json.h>
 #include "version.hpp"
+#include "gitea2rss.hpp"
 
 using std::cout;
 using std::cerr;
 using std::endl;
 using std::string;
-using std::ostringstream;
 using std::stringstream;
-using std::uint8_t;
-using std::uint16_t;
 using std::chrono::system_clock;
 
-namespace curlopts = curlpp::options;
-
 bool cgi = false;
-
-// Fetch HTTP document.
-const string get_http(const string &url)
-{
-    string answer;
-
-    try
-    {
-        ostringstream oss;
-        curlpp::Easy request;
-        request.setOpt<curlopts::Url>(url);
-        request.setOpt<curlopts::UserAgent>(string("gitea2rss/")
-                                            + global::version);
-        request.setOpt<curlopts::HttpHeader>({ "Connection: close" });
-        request.setOpt<curlopts::FollowLocation>(true);
-        request.setOpt<curlopts::WriteStream>(&oss);
-        request.perform();
-        uint16_t ret = curlpp::infos::ResponseCode::get(request);
-        if (ret == 200 || ret == 302 || ret == 307
-            || ret == 301 || ret == 308)
-        {
-            answer = oss.str();
-        }
-        else
-        {
-            if (cgi)
-            {
-                cout << "Status: " << std::to_string(ret) << endl;
-            }
-            cerr << "HTTP Error: " << std::to_string(ret) << endl;
-        }
-    }
-    catch (const std::exception &e)
-    {
-        cerr << "Error: " << e.what() << endl;
-    }
-
-    return answer;
-}
-
-// Convert time_point to RFC 822 compliant time string.
-const string strtime(const system_clock::time_point &timepoint)
-{
-    constexpr uint16_t bufsize = 1024;
-    std::time_t time = system_clock::to_time_t(timepoint);
-    std::tm *tm;
-    tm = std::gmtime(&time);
-    char buffer[bufsize];
-    std::strftime(buffer, bufsize, "%a, %d %b %Y %T %z", tm);
-    return static_cast<const string>(buffer);
-}
-
-// Convert ISO 8601 time string to RFC 822 time string.
-const string strtime(const string &time)
-{
-    std::tm tm = {};
-    tm.tm_isdst = -1;           // Detect daylight saving time.
-    std::stringstream ss(time);
-    ss >> std::get_time(&tm, "%Y-%m-%dT%T"); // Assume time is UTC.
-    return strtime(std::chrono::system_clock::from_time_t(timegm(&tm)));
-}
-
-void write_line(const uint8_t spaces, const string &tag, const string &value)
-{
-    string endtag;
-    // If there is a space in the tag, use only the part up until the space for
-    // the ending tag.
-    const size_t pos = tag.find(' ');
-    if (pos == std::string::npos)
-    {
-        endtag = tag;
-    }
-    else
-    {
-        endtag = tag.substr(0, pos);
-    }
-
-    cout << std::string(spaces, ' ');
-    cout << '<' << tag << '>' << value << "</" << endtag << ">\n";
-}
 
 int main(int argc, char *argv[])
 {
     const char *envquery = std::getenv("QUERY_STRING");
     string url;
+
+    curlpp::initialize();
 
     if (envquery != nullptr)
     {
@@ -162,8 +70,6 @@ int main(int argc, char *argv[])
     {
         url = argv[1];
     }
-
-    curlpp::initialize();
 
     size_t pos_repo = url.find('/', 8) + 1;
     const string baseurl = url.substr(0, pos_repo - 1);
@@ -215,6 +121,8 @@ int main(int argc, char *argv[])
     cout <<
         "  </channel>\n"
         "</rss>\n";
+
+    curlpp::terminate();
 
     return 0;
 }
