@@ -14,6 +14,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define CATCH_CONFIG_MAIN
+#include "gitea2rss.hpp"
 
-#include <catch.hpp>
+bool cgi = false;

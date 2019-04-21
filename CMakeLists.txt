@@ -20,6 +20,7 @@ set(CMAKE_CXX_FLAGS_DEBUG
   "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wpedantic -ftrapv \
 -fsanitize=undefined -g -Og -fno-omit-frame-pointer")
 
+include_directories(${PROJECT_SOURCE_DIR}/src)
 Include_directories(${PROJECT_BINARY_DIR})
 
 include_directories(${CURLPP_INCLUDE_DIRS})
@@ -53,5 +54,8 @@ if (WITH_MAN)
 endif()
 
 if(WITH_TESTS)
+  add_library(${PROJECT_NAME}_testlib SHARED ${sources})
+  target_link_libraries(${PROJECT_NAME}_testlib
+    ${CURLPP_LIBRARIES} ${JSONCPP_LIBRARIES})
   include(tests.CMakeLists.txt)
 endif()

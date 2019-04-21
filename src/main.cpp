@@ -27,8 +27,6 @@ using std::endl;
 using std::string;
 using std::chrono::system_clock;
 
-bool cgi = false;
-
 int main(int argc, char *argv[])
 {
     const char *envquery = std::getenv("QUERY_STRING");
