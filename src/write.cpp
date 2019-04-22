@@ -15,6 +15,7 @@
  */
 
 #include <iostream>
+#include <regex>
 #include <cstdlib>
 #include "version.hpp"
 #include "gitea2rss.hpp"
@@ -58,6 +59,7 @@ void write_preamble(const string &url, const string &type)
             selfurl = "http://";
         }
         selfurl += string(server_name) + request_uri;
+        selfurl = std::regex_replace(selfurl, std::regex("&"), "&amp;");
     }
 
     cout << "<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n"

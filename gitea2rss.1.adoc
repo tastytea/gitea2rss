@@ -51,7 +51,7 @@ this in it:
       href="https://rss.example.com/?repo={{.Repository.Owner.Name}}/{{.Repository.Name}}"/>
 <link rel="alternate" type="application/rss+xml"
       title="Tags of {{.Repository.Name}}"
-      href="https://rss.example.com/?repo={{.Repository.Owner.Name}}/{{.Repository.Name}}&type=tags"/>
+      href="https://rss.example.com/?repo={{.Repository.Owner.Name}}/{{.Repository.Name}}&amp;type=tags"/>
 {{end}}
 ----
 
