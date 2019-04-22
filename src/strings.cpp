@@ -14,6 +14,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <map>
+#include <regex>
 #include "gitea2rss.hpp"
 
 const string get_baseurl(const string &url)
@@ -38,4 +40,21 @@ const string get_project(const string &url)
 {
     const string repo = get_repo(url);
     return repo.substr(repo.find('/') + 1);
+}
+
+const string escape_some_html(const string &html)
+{
+    string output = html;
+    const std::map<char, string> names =
+        {
+            { '<', "&lt;" },
+            { '>', "&gt;" }
+        };
+    for (auto &pair : names)
+    {
+        const std::regex re(string(1, pair.first));
+        output = std::regex_replace(output, re, pair.second);
+    }
+
+    return output;
 }

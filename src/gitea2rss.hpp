@@ -61,4 +61,7 @@ const string get_repo(const string &url);
 //! Get the project name.
 const string get_project(const string &url);
 
+//! Escape some characters to named HTML entities.
+const string escape_some_html(const string &html);
+
 #endif  // GITEA2RSS_HPP

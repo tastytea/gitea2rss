@@ -50,6 +50,7 @@ uint8_t write_releases(const string &url)
     {
         const bool prerelease = release["prerelease"].asBool();
         const string type = (prerelease ? "Pre-Release" : "Stable");
+        const string body = escape_some_html(release["body"].asString());
 
         cout << "    <item>\n";
         write_line(6, "title", get_project(url) + ": "
@@ -60,7 +61,7 @@ uint8_t write_releases(const string &url)
         write_line(6, "pubDate", strtime(release["published_at"].asString()));
         write_line(6, "description",
                    "\n        <![CDATA[<p><strong>" + type + "</strong></p>\n"
-                   "<pre>" + release["body"].asString() + "</pre>\n"
+                   "<pre>" + body + "</pre>\n"
                    "        <p><a href=\"" + release["tarball_url"].asString()
                    + "\">Download tarball</a></p>]]>\n      ");
         cout << "    </item>\n";
