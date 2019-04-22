@@ -2,7 +2,7 @@
 :doctype:       manpage
 :Author:        tastytea
 :Email:         tastytea@tastytea.de
-:Date:          2019-04-20
+:Date:          2019-04-22
 :Revision:      0.0.0
 :man source:    gitea2rss
 :man version:   {revision}
@@ -71,18 +71,19 @@ https://git.example.com/user/project`
 
 [source,xml]
 ----
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
+    <atom:link href="https://rss.schlomp.space/?repo=tastytea/gitea2rss" rel="self" type="application/rss+xml"/>
     <title>gitea2rss releases</title>
     <link>https://schlomp.space/tastytea/gitea2rss</link>
-    <description>Releases of tastytea/gitea2rss</description>
-    <generator>gitea2rss 0.3.0</generator>
-    <lastBuildDate>Wed, 17 Apr 2019 20:31:15 +0200</lastBuildDate>
+    <description>List of releases of tastytea/gitea2rss</description>
+    <generator>gitea2rss 0.4.4</generator>
+    <lastBuildDate>Mon, 22 Apr 2019 11:46:53 +0000</lastBuildDate>
     <item>
       <title>gitea2rss: 0.1.0</title>
       <link>https://schlomp.space/tastytea/gitea2rss/releases</link>
       <guid isPermaLink="false">schlomp.space release 169</guid>
-      <pubDate>Wed, 17 Apr 2019 05:37:10 +0200</pubDate>
+      <pubDate>Wed, 17 Apr 2019 04:37:10 +0000</pubDate>
       <description>
         <![CDATA[<p><strong>Stable</strong></p>
 <pre>First release. Everything works, as far as I can tell.</pre>
