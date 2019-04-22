@@ -70,7 +70,8 @@ int main(int argc, char *argv[])
     }
     else if (argc < 2)
     {
-        cerr << "usage: " << argv[0] << " URL of Gitea project\n";
+        cerr << "usage: " << argv[0]
+             << " URL of Gitea project [releases|tags]\n";
         return 1;
     }
     else
