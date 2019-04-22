@@ -15,6 +15,7 @@
  */
 
 #include <iostream>
+#include <cstdlib>
 #include "version.hpp"
 #include "gitea2rss.hpp"
 
@@ -41,8 +42,31 @@ void write_line(const uint8_t spaces, const string &tag, const string &value)
 
 void write_preamble(const string &url, const string &type)
 {
-    cout << "<rss version=\"2.0\">\n"
+    const char *request_uri = std::getenv("REQUEST_URI");
+    const char *server_name = std::getenv("SERVER_NAME");
+    const char *https = getenv("HTTPS");
+    string selfurl;
+
+    if (request_uri != nullptr && server_name != nullptr)
+    {
+        if (https != nullptr && string(https) == "on")
+        {
+            selfurl = "https://";
+        }
+        else
+        {
+            selfurl = "http://";
+        }
+        selfurl += string(server_name) + request_uri;
+    }
+
+    cout << "<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n"
         "  <channel>\n";
+    if (cgi)
+    {
+        cout << "    <atom:link href=\"" + selfurl
+            + "\" rel=\"self\" type=\"application/rss+xml\"/>\n";
+    }
 
     write_line(4, "title", get_project(url) + " " + type);
     write_line(4, "link", url);
