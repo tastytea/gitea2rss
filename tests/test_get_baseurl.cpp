@@ -43,15 +43,4 @@ SCENARIO ("get_baseurl() works as expected", "[strings]")
             REQUIRE(baseurl == "http://git.example.com");
         }
     }
-
-    WHEN ("Gopher URL")
-    {
-        const string baseurl
-            = get_baseurl("gopher://git.example.com/user/project");
-
-        THEN ("The base URL is not correctly returned")
-        {
-            REQUIRE(baseurl == "gopher:/");
-        }
-    }
 }
