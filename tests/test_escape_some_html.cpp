@@ -25,11 +25,12 @@ SCENARIO ("escape_some_html() works as expected", "[strings]")
     WHEN ("String with escape-able characters")
     {
         const string escaped
-            = escape_some_html("<Anna & Arthur are escaping HTML.>");
+            = escape_some_html("<p><small>.</small></p>");
 
         THEN ("The HTML is escaped")
         {
-            REQUIRE(escaped == "&lt;Anna & Arthur are escaping HTML.&gt;");
+            REQUIRE(escaped ==
+                    "&lt;p&gt;&lt;small&gt;.&lt;/small&gt;&lt;/p&gt;");
         }
     }
 }

@@ -42,19 +42,19 @@ const string get_project(const string &url)
     return repo.substr(repo.find('/') + 1);
 }
 
-const string escape_some_html(const string &html)
+const string escape_some_html(string html)
 {
-    string output = html;
-    const std::map<char, string> names =
+    const std::map<const char, const string> names =
         {
             { '<', "&lt;" },
             { '>', "&gt;" }
         };
+
     for (auto &pair : names)
     {
         const std::regex re(string(1, pair.first));
-        output = std::regex_replace(output, re, pair.second);
+        html = std::regex_replace(html, re, pair.second);
     }
 
-    return output;
+    return html;
 }
