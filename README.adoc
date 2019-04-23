@@ -44,9 +44,8 @@ emerge -a dev-util/gitea2rss
 echo "APT::Default-Release \"stretch\";" >> /etc/apt/apt.conf.d/00default_release
 echo "deb http://deb.debian.org/debian sid main" >> /etc/apt/sources.list.d/sid.list
 apt-get update
-apt-get install g++-6 cmake pkg-config libcurl4-openssl-dev libjsoncpp-dev asciidoc
+apt-get install build-essential cmake pkg-config libcurl4-openssl-dev libjsoncpp-dev asciidoc
 apt-get install -t sid libcurlpp-dev
-export CXX="g++-6"
 ----
 
 ==== Get sourcecode
