@@ -18,7 +18,7 @@ there.
 [source,shellsession]
 ----
 eselect repository enable tastytea
-echo "dev-util/gitea2rss ~amd64" >> /etc/portage/package.accept_keywords/gitea2rss
+echo "www-misc/gitea2rss ~amd64" >> /etc/portage/package.accept_keywords/gitea2rss
 emaint sync -r tastytea
 emerge -a dev-util/gitea2rss
 ----
