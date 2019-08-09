@@ -28,6 +28,9 @@ using std::uint8_t;
 
 extern bool cgi;
 
+//! Set proxy from environment variable `http_proxy`.
+void set_proxy();
+
 //! Fetch HTTP document.
 const string get_http(const string &url);
 

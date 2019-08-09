@@ -42,8 +42,8 @@ else()
 endif()
 
 find_package(jsoncpp CONFIG REQUIRED)
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(curlpp REQUIRED IMPORTED_TARGET curlpp)
+# Some distributions do not contain Poco*Config.cmake recipes.
+find_package(Poco COMPONENTS Foundation Net NetSSL CONFIG)
 
 add_subdirectory(src)
 

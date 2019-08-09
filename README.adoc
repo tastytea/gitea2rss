@@ -15,7 +15,7 @@ See https://schlomp.space/tastytea/gitea2rss/src/branch/master/gitea2rss.1.adoc[
 Add my https://schlomp.space/tastytea/overlay[repository] and install it from
 there.
 
-[source,shellsession]
+[source,shell]
 ----
 eselect repository enable tastytea
 echo "www-misc/gitea2rss ~amd64" >> /etc/portage/package.accept_keywords/gitea2rss
@@ -31,21 +31,16 @@ emerge -a dev-util/gitea2rss
 * C++ compiler (tested: https://gcc.gnu.org/[gcc] 5/6/7/8,
   https://llvm.org/[clang] 3/5/6)
 * https://cmake.org/[cmake] (at least: 3.6)
-* https://pkgconfig.freedesktop.org/wiki/[pkgconfig] (tested: 0.29)
-* http://www.curlpp.org/[curlpp] (tested: 0.8)
+* https://pocoproject.org/[POCO] (tested: 1.9 / 1.7)
 * https://github.com/open-source-parsers/jsoncpp[jsoncpp] (tested: 1.8)
 * Optional:
 ** Manpage: http://asciidoc.org/[asciidoc] (tested: 8.6)
 
 ===== Debian stretch
 
-[source,shellsession]
+[source,shell]
 ----
-echo "APT::Default-Release \"stretch\";" >> /etc/apt/apt.conf.d/00default_release
-echo "deb http://deb.debian.org/debian sid main" >> /etc/apt/sources.list.d/sid.list
-apt-get update
-apt-get install build-essential cmake pkg-config libcurl4-openssl-dev libjsoncpp-dev asciidoc
-apt-get install -t sid libcurlpp-dev
+apt-get install build-essential cmake libpoco-dev libjsoncpp-dev asciidoc
 ----
 
 ==== Get sourcecode
@@ -57,14 +52,14 @@ https://schlomp.space/tastytea/gitea2rss/releases[schlomp.space].
 
 ===== Development version
 
-[source,shellsession]
+[source,shell]
 ----
 git clone https://schlomp.space/tastytea/gitea2rss.git
 ----
 
 ==== Compile
 
-[source,shellsession]
+[source,shell]
 ----
 mkdir build
 cd build/

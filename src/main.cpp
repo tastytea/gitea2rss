@@ -16,8 +16,8 @@
 
 #include <iostream>
 #include <string>
-#include <cstdlib>
-#include <curlpp/cURLpp.hpp>
+#include <Poco/Net/NetSSL.h>
+#include <Poco/Environment.h>
 #include "version.hpp"
 #include "gitea2rss.hpp"
 
@@ -26,20 +26,22 @@ using std::cerr;
 using std::endl;
 using std::string;
 using std::chrono::system_clock;
+using Poco::Environment;
 
 int main(int argc, char *argv[])
 {
-    const char *envquery = std::getenv("QUERY_STRING");
+    const string query = Environment::get("QUERY_STRING");
     string url;
     string type = "releases";
 
-    curlpp::initialize();
+    Poco::Net::initializeSSL();
 
-    if (envquery != nullptr)
+    set_proxy();
+
+    if (!query.empty())
     {
-        const string query = envquery;
-        const char *envbaseurl = std::getenv("GITEA2RSS_BASEURL");
-        if (envbaseurl == nullptr)
+        const string baseurl = Environment::get("GITEA2RSS_BASEURL");
+        if (baseurl.empty())
         {
             cout << "Status: 500 Internal Server Error\n\n";
             cerr << "Error: GITEA2RSS_BASEURL not set\n";
@@ -56,7 +58,7 @@ int main(int argc, char *argv[])
         }
         const size_t pos_repo = pos_found + 5;
         const size_t pos_endrepo = query.find('&', pos_repo) - pos_repo;
-        url = string(envbaseurl) + "/" + query.substr(pos_repo, pos_endrepo);
+        url = string(baseurl) + "/" + query.substr(pos_repo, pos_endrepo);
 
         // Look for type in QUERY_STRING.
         pos_found = query.find("type=");
@@ -101,7 +103,7 @@ int main(int argc, char *argv[])
     cout << "  </channel>\n"
         "</rss>\n";
 
-    curlpp::terminate();
+    Poco::Net::uninitializeSSL();
 
     return 0;
 }

@@ -16,11 +16,12 @@
 
 #include <iostream>
 #include <regex>
-#include <cstdlib>
+#include <Poco/Environment.h>
 #include "version.hpp"
 #include "gitea2rss.hpp"
 
 using std::cout;
+using Poco::Environment;
 
 void write_line(const uint8_t spaces, const string &tag, const string &value)
 {
@@ -43,14 +44,14 @@ void write_line(const uint8_t spaces, const string &tag, const string &value)
 
 void write_preamble(const string &url, const string &type)
 {
-    const char *request_uri = std::getenv("REQUEST_URI");
-    const char *server_name = std::getenv("SERVER_NAME");
-    const char *https = getenv("HTTPS");
+    const string request_uri = Environment::get("REQUEST_URI");
+    const string server_name = Environment::get("SERVER_NAME");
+    const string https = Environment::get("HTTPS");
     string selfurl;
 
-    if (request_uri != nullptr && server_name != nullptr)
+    if (!request_uri.empty() && !server_name.empty())
     {
-        if (https != nullptr && string(https) == "on")
+        if (https == "on")
         {
             selfurl = "https://";
         }
