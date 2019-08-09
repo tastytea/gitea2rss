@@ -6,7 +6,7 @@ https://rss.schlomp.space/?repo=tastytea/gitea2rss[Subscribe to gitea2rss releas
 
 == Usage
 
-See https://schlomp.space/tastytea/gitea2rss/src/branch/master/gitea2rss.1.adoc[manpage].
+See https://schlomp.space/tastytea/gitea2rss/src/branch/master/man/gitea2rss.1.adoc[manpage].
 
 == Install
 
