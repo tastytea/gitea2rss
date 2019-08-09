@@ -1,61 +1,56 @@
-cmake_minimum_required (VERSION 3.2)
+# Support version 3.2 and above, but use policy settings up to 3.14.
+cmake_minimum_required(VERSION 3.2...3.14)
+# Ranges are supported from 3.12, set policy to current for < 3.12.
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
+
 project(gitea2rss
   VERSION 0.4.4
-  LANGUAGES CXX
-)
+  LANGUAGES CXX)
 
-set(WITH_MAN "YES" CACHE STRING "WITH_MAN defaults to \"YES\"")
-set(WITH_TESTS "NO" CACHE STRING "WITH_TESTS defaults to \"NO\"")
+# DESCRIPTION was introduced in version 3.9.
+if(NOT (${CMAKE_VERSION} VERSION_LESS 3.9))
+  set(PROJECT_DESCRIPTION
+    "Generates RSS feeds from Gitea releases or tags.")
+endif()
 
-include(GNUInstallDirs)
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(CURLPP REQUIRED curlpp)
-pkg_check_modules(JSONCPP REQUIRED jsoncpp)
+option(WITH_MAN "Compile and install manpage." YES)
+option(WITH_TESTS "Compile tests." NO)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CMAKE_CXX_FLAGS_DEBUG
-  "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wpedantic -ftrapv \
--fsanitize=undefined -g -Og -fno-omit-frame-pointer")
+set(DEBUG_CXXFLAGS
+  "-Wall"
+  "-Wextra"
+  "-Wpedantic"
+  "-ftrapv"
+  "-fsanitize=undefined"
+  "-g"
+  "-Og"
+  "-fno-omit-frame-pointer")
+set(DEBUG_LDFLAGS
+  "-fsanitize=undefined")
+add_compile_options("$<$<CONFIG:Debug>:${DEBUG_CXXFLAGS}>")
+# add_link_options was introduced in version 3.13.
+if(${CMAKE_VERSION} VERSION_LESS 3.13)
+  set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${DEBUG_LDFLAGS}")
+else()
+  add_link_options("$<$<CONFIG:Debug>:${DEBUG_LDFLAGS}>")
+endif()
 
-include_directories(${PROJECT_SOURCE_DIR}/src)
-Include_directories(${PROJECT_BINARY_DIR})
+find_package(jsoncpp CONFIG REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(curlpp REQUIRED IMPORTED_TARGET curlpp)
 
-include_directories(${CURLPP_INCLUDE_DIRS})
-include_directories(${JSONCPP_INCLUDE_DIRS})
-
-link_directories(${CURLPP_LIBRARY_DIRS})
-link_directories(${JSONCPP_LIBRARY_DIRS})
-
-# Write version in header
-configure_file(
-    "${PROJECT_SOURCE_DIR}/src/version.hpp.in"
-    "${PROJECT_BINARY_DIR}/version.hpp"
-)
-
-file(GLOB sources src/*.cpp)
-add_executable(${PROJECT_NAME} "${sources}")
-target_link_libraries(${PROJECT_NAME} ${CURLPP_LIBRARIES} ${JSONCPP_LIBRARIES})
-install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
+add_subdirectory(src)
 
 if (WITH_MAN)
-  add_custom_command(
-    OUTPUT "${PROJECT_BINARY_DIR}/${PROJECT_NAME}.1"
-    WORKING_DIRECTORY "${PROJECT_BINARY_DIR}"
-    DEPENDS "${CMAKE_SOURCE_DIR}/${PROJECT_NAME}.1.adoc"
-    COMMAND ${CMAKE_SOURCE_DIR}/build_manpage.sh
-    ARGS ${PROJECT_VERSION})
-  add_custom_target(run ALL DEPENDS "${PROJECT_BINARY_DIR}/${PROJECT_NAME}.1")
-  install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.1
-    DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
+  add_subdirectory(man)
 endif()
 
 if(WITH_TESTS)
-  add_library(${PROJECT_NAME}_testlib SHARED ${sources})
-  target_link_libraries(${PROJECT_NAME}_testlib
-    ${CURLPP_LIBRARIES} ${JSONCPP_LIBRARIES})
-  include(tests.CMakeLists.txt)
+  add_subdirectory(tests)
 endif()
