@@ -30,7 +30,7 @@ using Poco::Environment;
 
 int main(int argc, char *argv[])
 {
-    const string query = Environment::get("QUERY_STRING");
+    const string query = Environment::get("QUERY_STRING", "");
     string url;
     string type = "releases";
 
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
     if (!query.empty())
     {
-        const string baseurl = Environment::get("GITEA2RSS_BASEURL");
+        const string baseurl = Environment::get("GITEA2RSS_BASEURL", "");
         if (baseurl.empty())
         {
             cout << "Status: 500 Internal Server Error\n\n";

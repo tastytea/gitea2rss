@@ -44,9 +44,9 @@ void write_line(const uint8_t spaces, const string &tag, const string &value)
 
 void write_preamble(const string &url, const string &type)
 {
-    const string request_uri = Environment::get("REQUEST_URI");
-    const string server_name = Environment::get("SERVER_NAME");
-    const string https = Environment::get("HTTPS");
+    const string request_uri = Environment::get("REQUEST_URI", "");
+    const string server_name = Environment::get("SERVER_NAME", "");
+    const string https = Environment::get("HTTPS", "");
     string selfurl;
 
     if (!request_uri.empty() && !server_name.empty())
