@@ -16,7 +16,7 @@
 
 #include <iostream>
 #include <sstream>
-#include <jsoncpp/json/json.h>
+#include <json/json.h>
 #include "gitea2rss.hpp"
 
 using std::cout;
