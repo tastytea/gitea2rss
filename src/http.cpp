@@ -14,10 +14,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <sstream>
 #include <iostream>
 #include <exception>
 #include <memory>
+#include <regex>
 #include <Poco/Net/HTTPClientSession.h>
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/Net/HTTPRequest.h>
@@ -35,6 +35,9 @@ using std::endl;
 using std::istream;
 using std::unique_ptr;
 using std::make_unique;
+using std::regex;
+using std::regex_search;
+using std::smatch;
 using Poco::Net::HTTPClientSession;
 using Poco::Net::HTTPSClientSession;
 using Poco::Net::HTTPRequest;
@@ -47,31 +50,21 @@ void set_proxy()
 {
     try
     {
-        HTTPClientSession::ProxyConfig proxy;
-        string proxy_env = Environment::get("http_proxy");
-        size_t pos;
+        HTTPSClientSession::ProxyConfig proxyconfig;
+        string env_proxy = Environment::get("http_proxy");
+        regex re_proxy("^(?:https?://)?(?:([^:]+):?([^@]*)@)?" // user:password
+                       "([^:]+):([[:digit:]]+/?)");            // host:port
+        smatch match;
 
-        // Only keep text between // and /.
-        if ((pos = proxy_env.find("//")) != string::npos)
+        if (regex_search(env_proxy, match, re_proxy))
         {
-            proxy_env = proxy_env.substr(pos + 2);
-        }
-        if ((pos = proxy_env.find('/')) != string::npos)
-        {
-            proxy_env = proxy_env.substr(0, pos);
-        }
+            proxyconfig.host = match[3].str();
+            proxyconfig.port = std::stoi(match[4].str());
+            proxyconfig.username = match[1].str();
+            proxyconfig.password = match[2].str();
 
-        if ((pos = proxy_env.find(':')) != string::npos)
-        {
-            proxy.host = proxy_env.substr(0, pos);
-            proxy.port = std::stoi(proxy_env.substr(pos + 1));
+            HTTPSClientSession::setGlobalProxyConfig(proxyconfig);
         }
-        else
-        {
-            proxy.host = proxy_env;
-        }
-
-        HTTPClientSession::setGlobalProxyConfig(proxy);
     }
     catch (const std::exception &)
     {
