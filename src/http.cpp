@@ -58,10 +58,14 @@ void set_proxy()
 
         if (regex_search(env_proxy, match, re_proxy))
         {
+            string username, password;
+            Poco::URI::decode(match[1].str(), username);
+            Poco::URI::decode(match[2].str(), password);
+
             proxyconfig.host = match[3].str();
             proxyconfig.port = std::stoi(match[4].str());
-            proxyconfig.username = match[1].str();
-            proxyconfig.password = match[2].str();
+            proxyconfig.username = username;
+            proxyconfig.password = password;
 
             HTTPSClientSession::setGlobalProxyConfig(proxyconfig);
         }
