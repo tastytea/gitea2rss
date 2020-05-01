@@ -41,7 +41,8 @@ else()
   add_link_options("$<$<CONFIG:Debug>:${DEBUG_LDFLAGS}>")
 endif()
 
-find_package(jsoncpp CONFIG REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(jsoncpp REQUIRED IMPORTED_TARGET jsoncpp)
 # Some distributions do not contain Poco*Config.cmake recipes.
 find_package(Poco COMPONENTS Foundation Net NetSSL CONFIG)
 

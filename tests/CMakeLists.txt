@@ -9,7 +9,7 @@ target_include_directories(${PROJECT_NAME}_testlib
   "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src>")
 
 target_link_libraries(${PROJECT_NAME}_testlib
-  PRIVATE Poco::Foundation Poco::Net Poco::NetSSL jsoncpp_lib)
+  PRIVATE Poco::Foundation Poco::Net Poco::NetSSL PkgConfig::jsoncpp)
 
 file(GLOB sources_tests test_*.cpp)
 

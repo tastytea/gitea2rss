@@ -11,7 +11,7 @@ target_include_directories(${PROJECT_NAME}
   PRIVATE "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>")
 
 target_link_libraries(${PROJECT_NAME}
-  PRIVATE jsoncpp_lib)
+  PRIVATE PkgConfig::jsoncpp)
 
 # If no Poco*Config.cmake recipes are found, look for headers in standard dirs.
 if(PocoNetSSL_FOUND)
