@@ -6,7 +6,7 @@ if(${CMAKE_VERSION} VERSION_LESS 3.12)
 endif()
 
 project(gitea2rss
-  VERSION 0.5.1
+  VERSION 0.5.2
   LANGUAGES CXX)
 
 # DESCRIPTION was introduced in version 3.9.
