@@ -34,7 +34,6 @@ int main(int argc, char *argv[])
 
     if (!query.empty())
     {
-        cout << query << " AAAAAAAAA\n";
         const string baseurl{get_env_var("GITEA2RSS_BASEURL")};
         if (baseurl.empty())
         {
