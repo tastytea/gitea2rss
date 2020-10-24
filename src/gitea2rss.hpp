@@ -1,5 +1,5 @@
 /*  This file is part of gitea2rss.
- *  Copyright © 2019 tastytea <tastytea@tastytea.de>
+ *  Copyright © 2019, 2020 tastytea <tastytea@tastytea.de>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,22 +17,22 @@
 #ifndef GITEA2RSS_HPP
 #define GITEA2RSS_HPP
 
-#include <string>
 #include <chrono>
-#include <ctime>
 #include <cstdint>
+#include <ctime>
+#include <string>
 
 using std::string;
-using std::chrono::system_clock;
 using std::uint8_t;
+using std::chrono::system_clock;
 
 extern bool cgi;
 
-//! Set proxy from environment variable `http_proxy`.
-void set_proxy();
-
 //! Fetch HTTP document.
-const string get_http(const string &url);
+string get_http(const string &url);
+
+// CURL receive function.
+size_t writer_body(char *data, size_t size, size_t nmemb);
 
 //! Convert time_point to RFC 822 compliant time string.
 const string strtime(const system_clock::time_point &timepoint);
@@ -41,7 +41,7 @@ const string strtime(const system_clock::time_point &timepoint);
 const string strtime(const string &time);
 
 //! Write line of XML.
-void write_line(const uint8_t spaces, const string &tag, const string &value);
+void write_line(uint8_t spaces, const string &tag, const string &value);
 
 //! Write the RSS preamble and channel data.
 void write_preamble(const string &url, const string &type);
@@ -67,4 +67,7 @@ const string get_project(const string &url);
 //! Escape some characters to named HTML entities.
 const string escape_some_html(string html);
 
-#endif  // GITEA2RSS_HPP
+//! Return environment variable or "" if it is not set.
+string get_env_var(const string &variable);
+
+#endif // GITEA2RSS_HPP

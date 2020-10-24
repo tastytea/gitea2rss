@@ -1,5 +1,5 @@
 /*  This file is part of gitea2rss.
- *  Copyright © 2019 tastytea <tastytea@tastytea.de>
+ *  Copyright © 2019, 2020 tastytea <tastytea@tastytea.de>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,142 +14,105 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <exception>
-#include <memory>
-#include <regex>
-#include <Poco/Net/HTTPClientSession.h>
-#include <Poco/Net/HTTPSClientSession.h>
-#include <Poco/Net/HTTPRequest.h>
-#include <Poco/Net/HTTPResponse.h>
-#include <Poco/StreamCopier.h>
-#include <Poco/URI.h>
-#include <Poco/Exception.h>
-#include <Poco/Environment.h>
-#include "version.hpp"
 #include "gitea2rss.hpp"
+#include "version.hpp"
+#include <curl/curl.h>
+#include <exception>
+#include <iostream>
+#include <stdexcept>
+#include <string>
 
-using std::cout;
 using std::cerr;
+using std::cout;
 using std::endl;
-using std::istream;
-using std::unique_ptr;
-using std::make_unique;
-using std::regex;
-using std::regex_search;
-using std::smatch;
-using Poco::Net::HTTPClientSession;
-using Poco::Net::HTTPSClientSession;
-using Poco::Net::HTTPRequest;
-using Poco::Net::HTTPResponse;
-using Poco::Net::HTTPMessage;
-using Poco::StreamCopier;
-using Poco::Environment;
+using std::runtime_error;
+using std::to_string;
 
-void set_proxy()
+string buffer_body;
+
+string get_http(const string &url)
 {
     try
     {
-        HTTPSClientSession::ProxyConfig proxyconfig;
-        string env_proxy = Environment::get("http_proxy");
-        regex re_proxy("^(?:https?://)?(?:([^:]+):?([^@]*)@)?" // user:password
-                       "([^:]+):([[:digit:]]+/?)");            // host:port
-        smatch match;
-
-        if (regex_search(env_proxy, match, re_proxy))
+        curl_global_init(CURL_GLOBAL_ALL); // NOLINT(hicpp-signed-bitwise)
+        CURL *connection{curl_easy_init()};
+        if (connection == nullptr)
         {
-            string username, password;
-            Poco::URI::decode(match[1].str(), username);
-            Poco::URI::decode(match[2].str(), password);
-
-            proxyconfig.host = match[3].str();
-            proxyconfig.port = std::stoi(match[4].str());
-            proxyconfig.username = username;
-            proxyconfig.password = password;
-
-            HTTPSClientSession::setGlobalProxyConfig(proxyconfig);
+            throw runtime_error{"Failed to initialize curl."};
         }
+
+        char buffer_error[256];
+
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
+        curl_easy_setopt(connection, CURLOPT_ERRORBUFFER, buffer_error);
+
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
+        curl_easy_setopt(connection, CURLOPT_WRITEFUNCTION, writer_body);
+
+        CURLcode code{curl_easy_setopt(connection, CURLOPT_FOLLOWLOCATION, 1L)};
+        if (code != CURLE_OK)
+        {
+            throw runtime_error{"HTTP is not supported."};
+        }
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
+        curl_easy_setopt(connection, CURLOPT_MAXREDIRS, 5L);
+
+        code =
+            curl_easy_setopt(connection, CURLOPT_USERAGENT,
+                             (string("gitea2rss/") += global::version).c_str());
+        if (code != CURLE_OK)
+        {
+            throw runtime_error{"Failed to set User-Agent."};
+        }
+
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
+        curl_easy_setopt(connection, CURLOPT_HTTPGET, 1L);
+
+        code = curl_easy_setopt(connection, CURLOPT_URL, url.c_str());
+        if (code != CURLE_OK)
+        {
+            throw runtime_error{"Couldn't set URL: " + to_string(code)};
+        }
+
+        code = curl_easy_perform(connection);
+        if (code != CURLE_OK)
+        {
+            throw runtime_error{"libcurl error: " + to_string(code)};
+        }
+
+        long http_status{0}; // NOLINT(google-runtime-int)
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
+        curl_easy_getinfo(connection, CURLINFO_RESPONSE_CODE, &http_status);
+
+        curl_easy_cleanup(connection);
+
+        if (http_status == 200)
+        {
+            return buffer_body;
+        }
+
+        if (cgi)
+        {
+            cout << "Status: " << http_status << endl;
+        }
+        throw runtime_error{"HTTP error: " + to_string(http_status)};
     }
-    catch (const std::exception &)
+    catch (const runtime_error &e)
     {
-        // No proxy found, no problem.
-    }
-}
-
-const string get_http(const string &url)
-{
-    try
-    {
-        Poco::URI poco_uri(url);
-        string path = poco_uri.getPathAndQuery();
-        if (path.empty())
-        {
-            path = "/";
-        }
-
-        unique_ptr<HTTPClientSession> session;
-        if (poco_uri.getScheme() == "https")
-        {
-            session = make_unique<HTTPSClientSession>(poco_uri.getHost(),
-                                                      poco_uri.getPort());
-        }
-        else if (poco_uri.getScheme() == "http")
-        {
-            session = make_unique<HTTPClientSession>(poco_uri.getHost(),
-                                                     poco_uri.getPort());
-        }
-        else
-        {
-            throw Poco::Exception("Protocol not supported.");
-        }
-
-        HTTPRequest request(HTTPRequest::HTTP_GET, path, HTTPMessage::HTTP_1_1);
-        request.set("User-Agent", string("gitea2rss/") + global::version);
-
-        HTTPResponse response;
-
-        session->sendRequest(request);
-        istream &rs = session->receiveResponse(response);
-
-        // Not using the constants because some are too new for Debian stretch.
-        switch (response.getStatus())
-        {
-        case 301:               // HTTPResponse::HTTP_MOVED_PERMANENTLY
-        case 308:               // HTTPResponse::HTTP_PERMANENT_REDIRECT
-        case 302:               // HTTPResponse::HTTP_FOUND
-        case 303:               // HTTPResponse::HTTP_SEE_OTHER
-        case 307:               // HTTPResponse::HTTP_TEMPORARY_REDIRECT
-        {
-            string location = response.get("Location");
-            if (location.substr(0, 4) != "http")
-            {
-                location = poco_uri.getScheme() + "://" + poco_uri.getHost()
-                    + location;
-            }
-            return get_http(location);
-        }
-        case HTTPResponse::HTTP_OK:
-        {
-            string answer;
-            StreamCopier::copyToString(rs, answer);
-            return answer;
-        }
-        default:
-        {
-            if (cgi)
-            {
-                cout << "Status: " << response.getStatus() << endl;
-            }
-            cerr << "HTTP Error: " << response.getStatus() << endl;
-
-            return "";
-        }
-        }
-    }
-    catch (const Poco::Exception &e)
-    {
-        cerr << "Error: " << e.displayText() << endl;
+        cerr << "Error: " << e.what() << endl;
     }
 
     return "";
+}
+
+size_t writer_body(char *data, size_t size, size_t nmemb)
+{
+    if (data == nullptr)
+    {
+        return 0;
+    }
+
+    buffer_body.append(data, size * nmemb);
+
+    return size * nmemb;
 }

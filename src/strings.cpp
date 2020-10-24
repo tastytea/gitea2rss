@@ -1,5 +1,5 @@
 /*  This file is part of gitea2rss.
- *  Copyright © 2019 tastytea <tastytea@tastytea.de>
+ *  Copyright © 2019, 2020 tastytea <tastytea@tastytea.de>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,9 +14,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "gitea2rss.hpp"
+#include <cstdlib>
 #include <map>
 #include <regex>
-#include "gitea2rss.hpp"
+
+using std::getenv;
 
 const string get_baseurl(const string &url)
 {
@@ -44,11 +47,8 @@ const string get_project(const string &url)
 
 const string escape_some_html(string html)
 {
-    const std::map<const char, const string> names =
-        {
-            { '<', "&lt;" },
-            { '>', "&gt;" }
-        };
+    const std::map<const char, const string> names = {{'<', "&lt;"},
+                                                      {'>', "&gt;"}};
 
     for (auto &pair : names)
     {
@@ -57,4 +57,14 @@ const string escape_some_html(string html)
     }
 
     return html;
+}
+
+string get_env_var(const string &variable)
+{
+    const char *env{getenv(variable.c_str())};
+    if (env != nullptr)
+    {
+        return env;
+    }
+    return "";
 }

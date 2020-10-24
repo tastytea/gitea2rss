@@ -31,7 +31,7 @@ emerge -a dev-util/gitea2rss
 * C++ compiler (tested: https://gcc.gnu.org/[gcc] 5/8/9,
   https://llvm.org/[clang] 3/7)
 * https://cmake.org/[cmake] (at least: 3.6)
-* https://pocoproject.org/[POCO] (tested: 1.9 / 1.7)
+* https://curl.haxx.se/libcurl/[libcurl] (at least: 7.56)
 * https://github.com/open-source-parsers/jsoncpp[jsoncpp] (tested: 1.8)
 * Optional:
 ** Manpage: http://asciidoc.org/[asciidoc] (tested: 8.6)
@@ -40,7 +40,7 @@ emerge -a dev-util/gitea2rss
 
 [source,shell]
 ----
-apt-get install build-essential cmake libpoco-dev libjsoncpp-dev asciidoc
+apt-get install build-essential cmake libcurl4-openssl-dev libjsoncpp-dev asciidoc
 ----
 
 ==== Get sourcecode

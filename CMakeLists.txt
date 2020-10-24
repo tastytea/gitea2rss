@@ -26,8 +26,7 @@ include(cmake/debug_flags.cmake)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(jsoncpp REQUIRED IMPORTED_TARGET jsoncpp)
-# Some distributions do not contain Poco*Config.cmake recipes.
-find_package(Poco COMPONENTS Foundation Net NetSSL CONFIG)
+find_package(CURL 7.56 REQUIRED)
 
 add_subdirectory(src)
 

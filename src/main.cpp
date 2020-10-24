@@ -1,5 +1,5 @@
 /*  This file is part of gitea2rss.
- *  Copyright © 2019 tastytea <tastytea@tastytea.de>
+ *  Copyright © 2019, 2020 tastytea <tastytea@tastytea.de>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,33 +14,28 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "gitea2rss.hpp"
+#include "version.hpp"
 #include <iostream>
 #include <string>
-#include <Poco/Net/NetSSL.h>
-#include <Poco/Environment.h>
-#include "version.hpp"
-#include "gitea2rss.hpp"
 
-using std::cout;
 using std::cerr;
+using std::cout;
 using std::endl;
 using std::string;
 using std::chrono::system_clock;
-using Poco::Environment;
 
 int main(int argc, char *argv[])
 {
-    const string query = Environment::get("QUERY_STRING", "");
+
+    const string query{get_env_var("QUERY_STRING")};
     string url;
     string type = "releases";
 
-    Poco::Net::initializeSSL();
-
-    set_proxy();
-
     if (!query.empty())
     {
-        const string baseurl = Environment::get("GITEA2RSS_BASEURL", "");
+        cout << query << " AAAAAAAAA\n";
+        const string baseurl{get_env_var("GITEA2RSS_BASEURL")};
         if (baseurl.empty())
         {
             cout << "Status: 500 Internal Server Error\n\n";
@@ -101,9 +96,7 @@ int main(int argc, char *argv[])
     }
 
     cout << "  </channel>\n"
-        "</rss>\n";
-
-    Poco::Net::uninitializeSSL();
+            "</rss>\n";
 
     return 0;
 }

@@ -2,7 +2,7 @@
 :doctype:       manpage
 :Author:        tastytea
 :Email:         tastytea@tastytea.de
-:Date:          2019-08-09
+:Date:          2020-10-24
 :Revision:      0.0.0
 :man source:    gitea2rss
 :man version:   {revision}
@@ -57,8 +57,8 @@ this in it:
 
 == PROXY SERVERS
 
-*gitea2rss* supports HTTP proxies set via the environment variable
-_http_proxy_. Accepted formats are _http://host:port/_ or _host:port_.
+Since *gitea2rss* is built on libcurl, it respects the same proxy environment
+variables. See *curl*(1), section _ENVIRONMENT_.
 
 == EXAMPLES
 
@@ -95,7 +95,7 @@ _http_proxy_. Accepted formats are _http://host:port/_ or _host:port_.
 
 == SEE ALSO
 
-*crontab*(1), *crontab*(5)
+*crontab*(1), *crontab*(5), *curl*(1)
 
 == REPORTING BUGS
 

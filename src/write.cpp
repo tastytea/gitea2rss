@@ -1,5 +1,5 @@
 /*  This file is part of gitea2rss.
- *  Copyright © 2019 tastytea <tastytea@tastytea.de>
+ *  Copyright © 2019, 2020 tastytea <tastytea@tastytea.de>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,14 +14,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "gitea2rss.hpp"
+#include "version.hpp"
+#include <cstdlib>
 #include <iostream>
 #include <regex>
-#include <Poco/Environment.h>
-#include "version.hpp"
-#include "gitea2rss.hpp"
 
 using std::cout;
-using Poco::Environment;
+using std::getenv;
 
 void write_line(const uint8_t spaces, const string &tag, const string &value)
 {
@@ -44,9 +44,9 @@ void write_line(const uint8_t spaces, const string &tag, const string &value)
 
 void write_preamble(const string &url, const string &type)
 {
-    const string request_uri = Environment::get("REQUEST_URI", "");
-    const string server_name = Environment::get("SERVER_NAME", "");
-    const string https = Environment::get("HTTPS", "");
+    const string request_uri{get_env_var("REQUEST_URI")};
+    const string server_name{get_env_var("SERVER_NAME")};
+    const string https{get_env_var("HTTPS")};
     string selfurl;
 
     if (!request_uri.empty() && !server_name.empty())
@@ -64,11 +64,11 @@ void write_preamble(const string &url, const string &type)
     }
 
     cout << "<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n"
-        "  <channel>\n";
+            "  <channel>\n";
     if (cgi)
     {
         cout << "    <atom:link href=\"" + selfurl
-            + "\" rel=\"self\" type=\"application/rss+xml\"/>\n";
+                    + "\" rel=\"self\" type=\"application/rss+xml\"/>\n";
     }
 
     write_line(4, "title", get_project(url) + " " + type);

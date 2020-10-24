@@ -1,3 +1,4 @@
+# -*- fill-column: 1000 -*-
 kind: pipeline
 name: on_push
 
@@ -30,7 +31,7 @@ steps:
   - gpg --armor --export 0x60c317803a41ba51845e371a1e9377a2ba9ef27f | apt-key add -
   - apt-get update -q
   - apt-get install -qy -t xenial g++-5
-  - apt-get install -qy cmake pkg-config libpoco-dev libjsoncpp-dev asciidoc
+  - apt-get install -qy cmake pkg-config libcurl4-openssl-dev libjsoncpp-dev asciidoc
   - rm -rf build && mkdir -p build && cd build
   - cmake ..
   - make VERBOSE=1
@@ -56,7 +57,7 @@ steps:
   - gpg --armor --export 0x60c317803a41ba51845e371a1e9377a2ba9ef27f | apt-key add -
   - apt-get update -q
   - apt-get install -qy -t xenial g++-9
-  - apt-get install -qy cmake pkg-config libpoco-dev libjsoncpp-dev asciidoc
+  - apt-get install -qy cmake pkg-config libcurl4-openssl-dev libjsoncpp-dev asciidoc
   - rm -rf build && mkdir -p build && cd build
   - cmake ..
   - make VERBOSE=1
@@ -75,7 +76,7 @@ steps:
   - rm /etc/apt/apt.conf.d/docker-clean
   - alias apt-get='rm -f /var/cache/apt/archives/lock && apt-get'
   - apt-get update -q
-  - apt-get install -qy clang cmake pkg-config libpoco-dev libjsoncpp-dev asciidoc
+  - apt-get install -qy clang cmake pkg-config libcurl4-openssl-dev libjsoncpp-dev asciidoc
   - rm -rf build && mkdir -p build && cd build
   - cmake ..
   - make VERBOSE=1
@@ -94,7 +95,7 @@ steps:
   - rm /etc/apt/apt.conf.d/docker-clean
   - alias apt-get='rm -f /var/cache/apt/archives/lock && apt-get'
   - apt-get update -q
-  - apt-get install -qy clang cmake pkg-config libpoco-dev libjsoncpp-dev asciidoc
+  - apt-get install -qy clang cmake pkg-config libcurl4-openssl-dev libjsoncpp-dev asciidoc
   - rm -rf build && mkdir -p build && cd build
   - cmake ..
   - make VERBOSE=1
@@ -106,7 +107,7 @@ steps:
   image: drillster/drone-email
   pull: always
   settings:
-    host: cryptoparty-celle.de
+    host: mail.tzend.de
     from: drone@tzend.de
     username:
       from_secret: email_username
