@@ -22,24 +22,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(DEBUG_CXXFLAGS
-  "-Wall"
-  "-Wextra"
-  "-Wpedantic"
-  "-ftrapv"
-  "-fsanitize=undefined"
-  "-g"
-  "-Og"
-  "-fno-omit-frame-pointer")
-set(DEBUG_LDFLAGS
-  "-fsanitize=undefined")
-add_compile_options("$<$<CONFIG:Debug>:${DEBUG_CXXFLAGS}>")
-# add_link_options was introduced in version 3.13.
-if(${CMAKE_VERSION} VERSION_LESS 3.13)
-  set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${DEBUG_LDFLAGS}")
-else()
-  add_link_options("$<$<CONFIG:Debug>:${DEBUG_LDFLAGS}>")
-endif()
+include(cmake/debug_flags.cmake)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(jsoncpp REQUIRED IMPORTED_TARGET jsoncpp)
