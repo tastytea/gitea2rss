@@ -29,10 +29,12 @@ steps:
   - rm -rf build && mkdir -p build && cd build
   - cmake ..
   - cmake --build .
-  - cd ..
+  - cd tests && ctest -V
+  - cd ../..
   - rm -rf build && mkdir -p build && cd build
   - CXX="clang++" cmake  ..
   - cmake --build .
+  - cd tests && ctest -V
   - make install
   volumes:
   - name: debian-package-cache
