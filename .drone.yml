@@ -13,92 +13,27 @@ trigger:
     - tag
 
 steps:
-- name: gcc5
-  image: debian:stretch-slim
-  pull: always
-  environment:
-    CXX: g++-5
-    CXXFLAGS: -pipe -O2
-    LANG: en_US.utf-8
-  commands:
-  - rm /etc/apt/apt.conf.d/docker-clean
-  - alias apt-get='rm -f /var/cache/apt/archives/lock && apt-get'
-  - echo "APT::Default-Release \"stretch\";" >> /etc/apt/apt.conf.d/00default_release
-  - echo "deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu xenial main" >> /etc/apt/sources.list.d/ubuntu-toolchain-r.list
-  - apt-get update -q
-  - apt-get install -qy gnupg
-  - gpg --keyserver hkp://keyserver.ubuntu.com --recv-keys 0x60c317803a41ba51845e371a1e9377a2ba9ef27f
-  - gpg --armor --export 0x60c317803a41ba51845e371a1e9377a2ba9ef27f | apt-key add -
-  - apt-get update -q
-  - apt-get install -qy -t xenial g++-5
-  - apt-get install -qy cmake pkg-config libcurl4-openssl-dev libjsoncpp-dev asciidoc
-  - rm -rf build && mkdir -p build && cd build
-  - cmake ..
-  - make VERBOSE=1
-  volumes:
-  - name: debian-package-cache
-    path: /var/cache/apt/archives
-
-- name: gcc9
-  image: debian:stretch-slim
-  pull: always
-  environment:
-    CXX: g++-9
-    CXXFLAGS: -pipe -O2
-    LANG: en_US.utf-8
-  commands:
-  - rm /etc/apt/apt.conf.d/docker-clean
-  - alias apt-get='rm -f /var/cache/apt/archives/lock && apt-get'
-  - echo "APT::Default-Release \"stretch\";" >> /etc/apt/apt.conf.d/00default_release
-  - echo "deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu xenial main" >> /etc/apt/sources.list.d/ubuntu-toolchain-r.list
-  - apt-get update -q
-  - apt-get install -qy gnupg
-  - gpg --keyserver hkp://keyserver.ubuntu.com --recv-keys 0x60c317803a41ba51845e371a1e9377a2ba9ef27f
-  - gpg --armor --export 0x60c317803a41ba51845e371a1e9377a2ba9ef27f | apt-key add -
-  - apt-get update -q
-  - apt-get install -qy -t xenial g++-9
-  - apt-get install -qy cmake pkg-config libcurl4-openssl-dev libjsoncpp-dev asciidoc
-  - rm -rf build && mkdir -p build && cd build
-  - cmake ..
-  - make VERBOSE=1
-  volumes:
-  - name: debian-package-cache
-    path: /var/cache/apt/archives
-
-- name: clang3
-  image: debian:stretch-slim
-  pull: always
-  environment:
-    CXX: clang++
-    CXXFLAGS: -pipe -O2
-    LANG: en_US.utf-8
-  commands:
-  - rm /etc/apt/apt.conf.d/docker-clean
-  - alias apt-get='rm -f /var/cache/apt/archives/lock && apt-get'
-  - apt-get update -q
-  - apt-get install -qy clang cmake pkg-config libcurl4-openssl-dev libjsoncpp-dev asciidoc
-  - rm -rf build && mkdir -p build && cd build
-  - cmake ..
-  - make VERBOSE=1
-  volumes:
-  - name: debian-package-cache
-    path: /var/cache/apt/archives
-
-- name: clang7
+- name: GCC 8 / clang 7
   image: debian:buster-slim
   pull: always
   environment:
-    CXX: clang++
+    CXX: g++-8
     CXXFLAGS: -pipe -O2
     LANG: en_US.utf-8
+    DEBIAN_FRONTEND: noninteractive
   commands:
   - rm /etc/apt/apt.conf.d/docker-clean
   - alias apt-get='rm -f /var/cache/apt/archives/lock && apt-get'
   - apt-get update -q
-  - apt-get install -qy clang cmake pkg-config libcurl4-openssl-dev libjsoncpp-dev asciidoc
+  - apt-get install -qq clang cmake pkg-config libcurl4-openssl-dev libjsoncpp-dev asciidoc
   - rm -rf build && mkdir -p build && cd build
   - cmake ..
-  - make VERBOSE=1
+  - cmake --build .
+  - cd ..
+  - rm -rf build && mkdir -p build && cd build
+  - CXX="clang++" cmake  ..
+  - cmake --build .
+  - make install
   volumes:
   - name: debian-package-cache
     path: /var/cache/apt/archives
