@@ -40,7 +40,7 @@ emerge -a dev-util/gitea2rss
 
 [source,shell]
 ----
-apt-get install build-essential cmake libcurl4-openssl-dev libjsoncpp-dev asciidoc
+apt install build-essential cmake libcurl4-openssl-dev libjsoncpp-dev asciidoc
 ----
 
 ==== Get sourcecode
@@ -61,8 +61,7 @@ git clone https://schlomp.space/tastytea/gitea2rss.git
 
 [source,shell]
 ----
-mkdir build
-cd build/
+mkdir build && cd build
 cmake ..
 cmake --build .
 ----
@@ -72,14 +71,5 @@ cmake --build .
 * `-DWITH_MAN=NO` to not compile the manpage.
 * `WITH_TESTS=YES` to compile the tests.
 
-You can run the tests with `ctest` inside the build directory. Install with
-`make install`.
-
-== Copyright
-
-----
-Copyright © 2019 tastytea <tastytea@tastytea.de>.
-License GPLv3: GNU GPL version 3 <https://www.gnu.org/licenses/gpl-3.0.html>.
-This program comes with ABSOLUTELY NO WARRANTY. This is free software,
-and you are welcome to redistribute it under certain conditions.
-----
+You can run the tests with `ctest` inside `build/tests`. Install with `make
+install`.
