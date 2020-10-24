@@ -27,9 +27,9 @@ If you want to use gitea2rss as a CGI script, you have to set
 *GITEA2RSS_BASEURL* to the basis URL of your instance, without the trailing
 slash. For example: _https://git.example.com_. The *QUERY_STRING* must contain
 _repo=user/project_. The feed-URL for alice's project, cooltool, would be:
-`https://rss.example.com/?repo=alice/cooltool`. You can select the type of the
+_https://rss.example.com/?repo=alice/cooltool_. You can select the type of the
 feed by appending `&type=` at the end of the URL. For example:
-`https://rss.example.com/?repo=alice/cooltool&type=tags`.
+_https://rss.example.com/?repo=alice/cooltool&type=tags_.
 
 The generated RSS feed contains the *channel* elements _title_, _link_,
 _description_, _generator_ and _lastBuildDate_ and the *item* elements _title_,
@@ -64,7 +64,7 @@ variables. See *curl*(1), section _ENVIRONMENT_.
 
 `gitea2rss https://git.example.com/user/project tags > repo.rss`
 
-`http_proxy="http://localhost:8080/" gitea2rss https://git.example.com/user/project`
+`ALL_PROXY="socks4a://[::1]:9050" gitea2rss https://git.example.com/user/project`
 
 === Example RSS feed
 
