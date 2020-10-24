@@ -1,5 +1,5 @@
-# Support version 3.2 and above, but use policy settings up to 3.14.
-cmake_minimum_required(VERSION 3.2...3.14)
+# Support version 3.6 and above, but use policy settings up to 3.17.
+cmake_minimum_required(VERSION 3.6...3.17)
 # Ranges are supported from 3.12, set policy to current for < 3.12.
 if(${CMAKE_VERSION} VERSION_LESS 3.12)
   cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
