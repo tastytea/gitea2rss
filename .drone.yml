@@ -25,7 +25,7 @@ steps:
   - rm /etc/apt/apt.conf.d/docker-clean
   - alias apt-get='rm -f /var/cache/apt/archives/lock && apt-get'
   - apt-get update -q
-  - apt-get install -qq build-essential clang cmake pkg-config libcurl4-openssl-dev libjsoncpp-dev asciidoc
+  - apt-get install -qq build-essential clang cmake pkg-config catch libcurl4-openssl-dev libjsoncpp-dev asciidoc
   - rm -rf build && mkdir -p build && cd build
   - cmake -DWITH_TESTS=yes ..
   - cmake --build .
