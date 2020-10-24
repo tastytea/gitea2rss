@@ -27,12 +27,12 @@ steps:
   - apt-get update -q
   - apt-get install -qq build-essential clang cmake pkg-config libcurl4-openssl-dev libjsoncpp-dev asciidoc
   - rm -rf build && mkdir -p build && cd build
-  - cmake ..
+  - cmake -DWITH_TESTS=yes ..
   - cmake --build .
   - cd tests && ctest -V
-  - cd ../..
+  - cd ../../
   - rm -rf build && mkdir -p build && cd build
-  - CXX="clang++" cmake  ..
+  - CXX="clang++" cmake -DWITH_TESTS=yes ..
   - cmake --build .
   - cd tests && ctest -V
   - make install
