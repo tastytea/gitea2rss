@@ -28,8 +28,8 @@ emerge -a dev-util/gitea2rss
 ==== Dependencies
 
 * Tested OS: Linux
-* C++ compiler (tested: https://gcc.gnu.org/[gcc] 5/8/9,
-  https://llvm.org/[clang] 3/7)
+* C++ compiler (tested: https://gcc.gnu.org/[gcc] 8/9,
+  https://llvm.org/[clang] 7)
 * https://cmake.org/[cmake] (at least: 3.6)
 * https://curl.haxx.se/libcurl/[libcurl] (at least: 7.56)
 * https://github.com/open-source-parsers/jsoncpp[jsoncpp] (tested: 1.8)
