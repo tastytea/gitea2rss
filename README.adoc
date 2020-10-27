@@ -31,7 +31,7 @@ emerge -a dev-util/gitea2rss
 * Tested OS: Linux
 * C++ compiler (tested: https://gcc.gnu.org/[gcc] 8/9,
   https://llvm.org/[clang] 7)
-* https://cmake.org/[cmake] (at least: 3.6)
+* https://cmake.org/[cmake] (at least: 3.12)
 * https://curl.haxx.se/libcurl/[libcurl] (at least: 7.56)
 * https://github.com/open-source-parsers/jsoncpp[jsoncpp] (tested: 1.8)
 * Optional:

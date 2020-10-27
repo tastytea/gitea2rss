@@ -1,19 +1,10 @@
-# Support version 3.6 and above, but use policy settings up to 3.17.
-cmake_minimum_required(VERSION 3.6...3.17)
-# Ranges are supported from 3.12, set policy to current for < 3.12.
-if(${CMAKE_VERSION} VERSION_LESS 3.12)
-  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-endif()
+# IMPORTED target CURL::libcurl needs 3.12.
+cmake_minimum_required(VERSION 3.12...3.17)
 
 project(gitea2rss
   VERSION 0.5.2
+  DESCRIPTION "Generates RSS feeds from Gitea releases or tags."
   LANGUAGES CXX)
-
-# DESCRIPTION was introduced in version 3.9.
-if(NOT (${CMAKE_VERSION} VERSION_LESS 3.9))
-  set(PROJECT_DESCRIPTION
-    "Generates RSS feeds from Gitea releases or tags.")
-endif()
 
 option(WITH_MAN "Compile and install manpage." YES)
 option(WITH_TESTS "Compile tests." NO)
