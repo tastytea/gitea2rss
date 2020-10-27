@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.12...3.17)
 
 project(gitea2rss
-  VERSION 0.5.2
+  VERSION 0.6.0
   DESCRIPTION "Generates RSS feeds from Gitea releases or tags."
   LANGUAGES CXX)
 
