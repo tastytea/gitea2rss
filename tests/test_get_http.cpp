@@ -29,7 +29,7 @@ SCENARIO("get_http() works as expected", "[http]")
 
         THEN("Answer is not empty")
         {
-            REQUIRE(answer != "");
+            REQUIRE(!answer.empty());
         }
     }
 
@@ -39,7 +39,7 @@ SCENARIO("get_http() works as expected", "[http]")
 
         THEN("Answer is empty")
         {
-            REQUIRE(answer == "");
+            REQUIRE(answer.empty());
         }
     }
 }
