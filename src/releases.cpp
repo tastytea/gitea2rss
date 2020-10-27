@@ -58,7 +58,9 @@ uint8_t write_releases(const string &url)
         cout << "    <item>\n";
         write_line(6, "title",
                    get_project(url) + ": " + release["name"].asString());
-        write_line(6, "link", (baseurl + "/" += repo) += "/releases");
+        write_line(6, "link",
+                   ((baseurl + "/" += repo) += "/releases/tag/") +=
+                   release["tag_name"].asString());
         write_line(6, "guid isPermaLink=\"false\"",
                    get_domain(url) + " release " + release["id"].asString());
         write_line(6, "pubDate", strtime(release["published_at"].asString()));

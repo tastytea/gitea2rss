@@ -2,7 +2,7 @@
 :doctype:       manpage
 :Author:        tastytea
 :Email:         tastytea@tastytea.de
-:Date:          2020-10-24
+:Date:          2020-10-27
 :Revision:      0.0.0
 :man source:    gitea2rss
 :man version:   {revision}
@@ -33,9 +33,7 @@ _https://rss.example.com/?repo=alice/cooltool&type=tags_.
 
 The generated RSS feed contains the *channel* elements _title_, _link_,
 _description_, _generator_ and _lastBuildDate_ and the *item* elements _title_,
-_link_, _guid_, _pubDate_ and _description_. Since Gitea has no individual pages
-for each release, _link_ elements in *item* are set to the overview page for
-releases.
+_link_, _guid_, _pubDate_ and _description_.
 
 == GITEA INTEGRATION
 
