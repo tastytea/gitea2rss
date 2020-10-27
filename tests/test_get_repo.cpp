@@ -1,5 +1,5 @@
 /*  This file is part of gitea2rss.
- *  Copyright © 2019 tastytea <tastytea@tastytea.de>
+ *  Copyright © 2019, 2020 tastytea <tastytea@tastytea.de>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,20 +14,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string>
-#include <catch.hpp>
 #include "gitea2rss.hpp"
+#include <catch.hpp>
+#include <string>
 
 using std::string;
+using namespace gitea2rss;
 
-SCENARIO ("get_repo() works as expected", "[strings]")
+SCENARIO("get_repo() works as expected", "[strings]")
 {
-    WHEN ("HTTPS URL is valid")
+    WHEN("HTTPS URL is valid")
     {
-        const string repo
-            = get_repo("https://git.example.com/user/project");
+        const string repo = get_repo("https://git.example.com/user/project");
 
-        THEN ("The repo is correctly returned")
+        THEN("The repo is correctly returned")
         {
             REQUIRE(repo == "user/project");
         }

@@ -1,9 +1,11 @@
 #ifndef VERSION_HPP
 #define VERSION_HPP
 
-namespace global
+namespace gitea2rss
 {
-    static constexpr char version[] = "@PROJECT_VERSION@";
-}
+
+static constexpr char version[] = "@PROJECT_VERSION@";
+
+} // namespace gitea2rss
 
 #endif // VERSION_HPP

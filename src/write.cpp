@@ -20,8 +20,10 @@
 #include <iostream>
 #include <regex>
 
+namespace gitea2rss
+{
+
 using std::cout;
-using std::getenv;
 
 void write_line(const uint8_t spaces, const string &tag, const string &value)
 {
@@ -74,6 +76,8 @@ void write_preamble(const string &url, const string &type)
     write_line(4, "title", get_project(url) + " " + type);
     write_line(4, "link", url);
     write_line(4, "description", "List of " + type + " of " + get_repo(url));
-    write_line(4, "generator", string("gitea2rss ") + global::version);
+    write_line(4, "generator", string("gitea2rss ") + version);
     write_line(4, "lastBuildDate", strtime(system_clock::now()));
 }
+
+} // namespace gitea2rss

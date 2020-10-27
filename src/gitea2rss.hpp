@@ -22,6 +22,9 @@
 #include <ctime>
 #include <string>
 
+namespace gitea2rss
+{
+
 using std::string;
 using std::uint8_t;
 using std::chrono::system_clock;
@@ -35,10 +38,10 @@ string get_http(const string &url);
 size_t writer_body(char *data, size_t size, size_t nmemb);
 
 //! Convert time_point to RFC 822 compliant time string.
-const string strtime(const system_clock::time_point &timepoint);
+string strtime(const system_clock::time_point &timepoint);
 
 //! Convert ISO 8601 time string to RFC 822 time string.
-const string strtime(const string &time);
+string strtime(const string &time);
 
 //! Write line of XML.
 void write_line(uint8_t spaces, const string &tag, const string &value);
@@ -53,21 +56,23 @@ uint8_t write_releases(const string &url);
 uint8_t write_tags(const string &url);
 
 //! @brief Get the base URL, without trailing slash.
-const string get_baseurl(const string &url);
+string get_baseurl(const string &url);
 
 //! Get the domain name.
-const string get_domain(const string &url);
+string get_domain(const string &url);
 
 //! Get the full name of the repo (user/project).
-const string get_repo(const string &url);
+string get_repo(const string &url);
 
 //! Get the project name.
-const string get_project(const string &url);
+string get_project(const string &url);
 
 //! Escape some characters to named HTML entities.
-const string escape_some_html(string html);
+string escape_some_html(string html);
 
 //! Return environment variable or "" if it is not set.
 string get_env_var(const string &variable);
+
+} // namespace gitea2rss
 
 #endif // GITEA2RSS_HPP

@@ -21,9 +21,8 @@
 
 using std::cerr;
 using std::cout;
-using std::endl;
 using std::string;
-using std::chrono::system_clock;
+using namespace gitea2rss;
 
 int main(int argc, char *argv[])
 {
@@ -66,15 +65,18 @@ int main(int argc, char *argv[])
     }
     else if (argc < 2)
     {
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
         cerr << "usage: " << argv[0]
              << " URL of Gitea project [releases|tags]\n";
         return 1;
     }
     else
     {
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
         url = argv[1];
         if (argc > 2)
         {
+            // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
             type = argv[2];
         }
     }

@@ -1,5 +1,5 @@
 /*  This file is part of gitea2rss.
- *  Copyright © 2019 tastytea <tastytea@tastytea.de>
+ *  Copyright © 2019, 2020 tastytea <tastytea@tastytea.de>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,23 +14,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string>
-#include <catch.hpp>
 #include "gitea2rss.hpp"
+#include <catch.hpp>
+#include <string>
 
 using std::string;
+using namespace gitea2rss;
 
-SCENARIO ("escape_some_html() works as expected", "[strings]")
+SCENARIO("escape_some_html() works as expected", "[strings]")
 {
-    WHEN ("String with escape-able characters")
+    WHEN("String with escape-able characters")
     {
-        const string escaped
-            = escape_some_html("<p><small>.</small></p>");
+        const string escaped = escape_some_html("<p><small>.</small></p>");
 
-        THEN ("The HTML is escaped")
+        THEN("The HTML is escaped")
         {
-            REQUIRE(escaped ==
-                    "&lt;p&gt;&lt;small&gt;.&lt;/small&gt;&lt;/p&gt;");
+            REQUIRE(escaped
+                    == "&lt;p&gt;&lt;small&gt;.&lt;/small&gt;&lt;/p&gt;");
         }
     }
 }

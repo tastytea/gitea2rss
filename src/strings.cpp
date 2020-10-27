@@ -19,38 +19,41 @@
 #include <map>
 #include <regex>
 
+namespace gitea2rss
+{
+
 using std::getenv;
 
-const string get_baseurl(const string &url)
+string get_baseurl(const string &url)
 {
     const size_t pos = url.find('/', 8);
     return url.substr(0, pos);
 }
 
-const string get_domain(const string &url)
+string get_domain(const string &url)
 {
     const string baseurl = get_baseurl(url);
     return baseurl.substr(baseurl.rfind('/') + 1);
 }
 
-const string get_repo(const string &url)
+string get_repo(const string &url)
 {
     const size_t pos = url.find('/', 8) + 1;
     return url.substr(pos);
 }
 
-const string get_project(const string &url)
+string get_project(const string &url)
 {
     const string repo = get_repo(url);
     return repo.substr(repo.find('/') + 1);
 }
 
-const string escape_some_html(string html)
+string escape_some_html(string html)
 {
     const std::map<const char, const string> names = {{'<', "&lt;"},
                                                       {'>', "&gt;"}};
 
-    for (auto &pair : names)
+    for (const auto &pair : names)
     {
         const std::regex re(string(1, pair.first));
         html = std::regex_replace(html, re, pair.second);
@@ -68,3 +71,5 @@ string get_env_var(const string &variable)
     }
     return "";
 }
+
+} // namespace gitea2rss

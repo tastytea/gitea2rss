@@ -16,4 +16,9 @@
 
 #include "gitea2rss.hpp"
 
+namespace gitea2rss
+{
+
 bool cgi = false;
+
+} // namespace gitea2rss

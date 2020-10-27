@@ -1,5 +1,5 @@
 /*  This file is part of gitea2rss.
- *  Copyright © 2019 tastytea <tastytea@tastytea.de>
+ *  Copyright © 2019, 2020 tastytea <tastytea@tastytea.de>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,22 +14,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <sstream>
-#include <json/json.h>
 #include "gitea2rss.hpp"
+#include <iostream>
+#include <json/json.h>
+#include <sstream>
 
-using std::cout;
 using std::cerr;
+using std::cout;
 using std::endl;
 using std::stringstream;
+
+namespace gitea2rss
+{
 
 uint8_t write_releases(const string &url)
 {
     const string baseurl = get_baseurl(url);
     const string repo = get_repo(url);
-    stringstream data(get_http(baseurl + "/api/v1/repos/"
-                               + repo + "/releases"));
+    stringstream data(
+        get_http(baseurl + "/api/v1/repos/" + repo + "/releases"));
 
     if (cgi)
     {
@@ -53,19 +56,25 @@ uint8_t write_releases(const string &url)
         const string body = escape_some_html(release["body"].asString());
 
         cout << "    <item>\n";
-        write_line(6, "title", get_project(url) + ": "
-                   + release["name"].asString());
-        write_line(6, "link", baseurl + "/" + repo + "/releases");
+        write_line(6, "title",
+                   get_project(url) + ": " + release["name"].asString());
+        write_line(6, "link", (baseurl + "/" += repo) += "/releases");
         write_line(6, "guid isPermaLink=\"false\"",
                    get_domain(url) + " release " + release["id"].asString());
         write_line(6, "pubDate", strtime(release["published_at"].asString()));
         write_line(6, "description",
-                   "\n        <![CDATA[<p><strong>" + type + "</strong></p>\n"
-                   "<pre>" + body + "</pre>\n"
-                   "        <p><a href=\"" + release["tarball_url"].asString()
-                   + "\">Download tarball</a></p>]]>\n      ");
+                   "\n        <![CDATA[<p><strong>" + type
+                       + "</strong></p>\n"
+                         "<pre>"
+                       + body
+                       + "</pre>\n"
+                         "        <p><a href=\""
+                       + release["tarball_url"].asString()
+                       + "\">Download tarball</a></p>]]>\n      ");
         cout << "    </item>\n";
     }
 
     return 0;
 }
+
+} // namespace gitea2rss

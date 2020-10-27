@@ -22,6 +22,9 @@
 #include <stdexcept>
 #include <string>
 
+namespace gitea2rss
+{
+
 using std::cerr;
 using std::cout;
 using std::endl;
@@ -49,6 +52,7 @@ string get_http(const string &url)
         // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
         curl_easy_setopt(connection, CURLOPT_WRITEFUNCTION, writer_body);
 
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
         CURLcode code{curl_easy_setopt(connection, CURLOPT_FOLLOWLOCATION, 1L)};
         if (code != CURLE_OK)
         {
@@ -57,9 +61,9 @@ string get_http(const string &url)
         // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
         curl_easy_setopt(connection, CURLOPT_MAXREDIRS, 5L);
 
-        code =
-            curl_easy_setopt(connection, CURLOPT_USERAGENT,
-                             (string("gitea2rss/") += global::version).c_str());
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
+        code = curl_easy_setopt(connection, CURLOPT_USERAGENT,
+                                (string("gitea2rss/") += version).c_str());
         if (code != CURLE_OK)
         {
             throw runtime_error{"Failed to set User-Agent."};
@@ -68,6 +72,7 @@ string get_http(const string &url)
         // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
         curl_easy_setopt(connection, CURLOPT_HTTPGET, 1L);
 
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
         code = curl_easy_setopt(connection, CURLOPT_URL, url.c_str());
         if (code != CURLE_OK)
         {
@@ -116,3 +121,5 @@ size_t writer_body(char *data, size_t size, size_t nmemb)
 
     return size * nmemb;
 }
+
+} // namespace gitea2rss
