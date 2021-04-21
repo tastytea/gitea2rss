@@ -54,8 +54,15 @@ uint8_t write_commits(const string &url)
     for (const Json::Value &commit : json)
     {
         const string sha = commit["sha"].asString();
-        const string message = commit["commit"]["message"].asString();
+        string message = commit["commit"]["message"].asString();
         const string title = message.substr(0, message.find('\n'));
+        {
+            size_t pos{};
+            while ((pos = message.find('\n')) != string::npos)
+            {
+                message.replace(pos, 1, "<br>");
+            }
+        }
         const string commit_url = commit["html_url"].asString();
         const string author = commit["commit"]["author"]["email"].asString()
                               + " ("
