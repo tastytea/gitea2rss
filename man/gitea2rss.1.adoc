@@ -2,7 +2,7 @@
 :doctype:       manpage
 :Author:        tastytea
 :Email:         tastytea@tastytea.de
-:Date:          2020-10-27
+:Date:          2021-04-21
 :Revision:      0.0.0
 :man source:    gitea2rss
 :man version:   {revision}
@@ -50,6 +50,9 @@ this in it:
 <link rel="alternate" type="application/rss+xml"
       title="Tags of {{.Repository.Name}}"
       href="https://rss.example.com/?repo={{.Repository.Owner.Name}}/{{.Repository.Name}}&amp;type=tags"/>
+<link rel="alternate" type="application/rss+xml"
+      title="Commits of {{.Repository.Name}}"
+      href="https://rss.example.com/?repo={{.Repository.Owner.Name}}/{{.Repository.Name}}&amp;type=commits"/>
 {{end}}
 ----
 

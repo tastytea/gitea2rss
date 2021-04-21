@@ -1,6 +1,7 @@
 = gitea2rss
 
-*gitea2rss* Generates RSS feeds from https://gitea.io[Gitea] releases or tags.
+*gitea2rss* Generates RSS feeds from https://gitea.io[Gitea] releases, tags and
+ commits.
 
 https://rss.schlomp.space/?repo=tastytea/gitea2rss[Subscribe to gitea2rss releases].
 
@@ -29,7 +30,7 @@ emerge -a dev-util/gitea2rss
 ==== Dependencies
 
 * Tested OS: Linux
-* C++ compiler (tested: https://gcc.gnu.org/[gcc] 8/9,
+* C++ compiler (tested: https://gcc.gnu.org/[gcc] 8/9/10,
   https://llvm.org/[clang] 7)
 * https://cmake.org/[cmake] (at least: 3.12)
 * https://curl.haxx.se/libcurl/[libcurl] (at least: 7.56)
