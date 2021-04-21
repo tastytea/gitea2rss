@@ -51,24 +51,28 @@ uint8_t write_commits(const string &url)
     Json::Value json;
     data >> json;
 
-    for (const Json::Value &ref : json)
+    for (const Json::Value &commit : json)
     {
-        const string sha = ref["sha"].asString();
-        const string message = ref["commit"]["message"].asString();
+        const string sha = commit["sha"].asString();
+        const string message = commit["commit"]["message"].asString();
         const string title = message.substr(0, message.find('\n'));
-        const string commit_url = ref["html_url"].asString();
-        const string author = ref["commit"]["author"]["email"].asString() + " ("
-                              + ref["commit"]["author"]["name"].asString()
+        const string commit_url = commit["html_url"].asString();
+        const string author = commit["commit"]["author"]["email"].asString()
+                              + " ("
+                              + commit["commit"]["author"]["name"].asString()
                               + ")";
+        const string date = strtime(
+            commit["commit"]["author"]["date"].asString());
 
         cout << "    <item>\n";
         write_line(6, "title", get_project(url) + ": " + title);
         write_line(6, "link", commit_url);
         write_line(6, "guid isPermaLink=\"false\"",
                    get_domain(url) + " commit " + sha);
+        write_line(6, "author", author);
+        write_line(6, "pubDate", date);
         write_line(6, "description",
                    "\n        <![CDATA[<p>" + message + "</p>]]>\n      ");
-        write_line(6, "author", author);
         cout << "    </item>\n";
     }
 
