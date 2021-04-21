@@ -1,5 +1,5 @@
 /*  This file is part of gitea2rss.
- *  Copyright © 2019, 2020 tastytea <tastytea@tastytea.de>
+ *  Copyright © 2019-2021 tastytea <tastytea@tastytea.de>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
  */
 
 #include "gitea2rss.hpp"
+
 #include <cstdlib>
 #include <map>
 #include <regex>
@@ -50,8 +51,8 @@ string get_project(const string &url)
 
 string escape_some_html(string html)
 {
-    const std::map<const char, const string> names = {{'<', "&lt;"},
-                                                      {'>', "&gt;"}};
+    const std::map<const char, const string> names = {{'<', "&#x3C;"},
+                                                      {'>', "&#x3E;"}};
 
     for (const auto &pair : names)
     {
