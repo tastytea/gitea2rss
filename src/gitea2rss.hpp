@@ -1,5 +1,5 @@
 /*  This file is part of gitea2rss.
- *  Copyright © 2019, 2020 tastytea <tastytea@tastytea.de>
+ *  Copyright © 2019-2021 tastytea <tastytea@tastytea.de>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -54,6 +54,9 @@ uint8_t write_releases(const string &url);
 
 //! Write tags.
 uint8_t write_tags(const string &url);
+
+//! Write commits.
+uint8_t write_commits(const string &url);
 
 //! @brief Get the base URL, without trailing slash.
 string get_baseurl(const string &url);

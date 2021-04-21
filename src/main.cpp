@@ -1,5 +1,5 @@
 /*  This file is part of gitea2rss.
- *  Copyright © 2019, 2020 tastytea <tastytea@tastytea.de>
+ *  Copyright © 2019-2021 tastytea <tastytea@tastytea.de>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
 #include "gitea2rss.hpp"
 #include "version.hpp"
+
 #include <iostream>
 #include <string>
 
@@ -67,7 +68,7 @@ int main(int argc, char *argv[])
     {
         // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
         cerr << "usage: " << argv[0]
-             << " URL of Gitea project [releases|tags]\n";
+             << " URL of Gitea project [releases|tags|commits]\n";
         return 1;
     }
     else
@@ -89,6 +90,10 @@ int main(int argc, char *argv[])
     else if (type == "tags")
     {
         ret = write_tags(url);
+    }
+    else if (type == "commits")
+    {
+        ret = write_commits(url);
     }
 
     if (ret != 0)
