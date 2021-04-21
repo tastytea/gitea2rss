@@ -1,5 +1,5 @@
 /*  This file is part of gitea2rss.
- *  Copyright © 2019, 2020 tastytea <tastytea@tastytea.de>
+ *  Copyright © 2019-2021 tastytea <tastytea@tastytea.de>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,8 +15,10 @@
  */
 
 #include "gitea2rss.hpp"
-#include <iostream>
+
 #include <json/json.h>
+
+#include <iostream>
 #include <sstream>
 
 namespace gitea2rss
@@ -45,7 +47,7 @@ uint8_t write_tags(const string &url)
         return 2;
     }
 
-    write_preamble(url, "releases");
+    write_preamble(url, "tags");
 
     Json::Value json;
     data >> json;
