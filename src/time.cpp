@@ -15,7 +15,10 @@
  */
 
 #include "gitea2rss.hpp"
+
+#include <ctime>
 #include <iomanip>
+#include <string>
 
 namespace gitea2rss
 {
@@ -32,11 +35,28 @@ string strtime(const system_clock::time_point &timepoint)
 
 string strtime(const string &time)
 {
+    // FIXME: Do this more elegantly.
     std::tm tm = {};
     tm.tm_isdst = -1; // Detect daylight saving time.
     std::stringstream ss(time);
-    ss >> std::get_time(&tm, "%Y-%m-%dT%T"); // Assume time is UTC.
-    return strtime(system_clock::from_time_t(timegm(&tm)));
+    ss >> std::get_time(&tm, "%Y-%m-%dT%T");
+    std::time_t time_tmp = timegm(&tm);
+
+    constexpr size_t zone_start = 19;
+    if (time[zone_start] == '+')
+    {
+        string zone = time.substr(zone_start + 1);
+        time_tmp -= std::stol(zone.substr(0, 2)) * 60 * 60;
+        time_tmp -= std::stol(zone.substr(3)) * 60;
+    }
+    else if (time[zone_start] == '+')
+    {
+        string zone = time.substr(zone_start + 1);
+        time_tmp += std::stol(zone.substr(0, 2)) * 60 * 60;
+        time_tmp += std::stol(zone.substr(3)) * 60;
+    }
+
+    return strtime(system_clock::from_time_t(time_tmp));
 }
 
 } // namespace gitea2rss
