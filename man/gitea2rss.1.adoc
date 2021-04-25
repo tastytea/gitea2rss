@@ -2,7 +2,7 @@
 :doctype:       manpage
 :Author:        tastytea
 :Email:         tastytea@tastytea.de
-:Date:          2021-04-21
+:Date:          2021-04-25
 :Revision:      0.0.0
 :man source:    gitea2rss
 :man version:   {revision}
@@ -14,7 +14,7 @@ gitea2rss - Generates RSS feeds from Gitea releases or tags.
 
 == SYNOPSIS
 
-*gitea2rss* _URL of Gitea project_ [_releases_|_tags_]
+*gitea2rss* _URL of Gitea project_ [_releases_|_tags_|_commits_]
 
 == DESCRIPTION
 
