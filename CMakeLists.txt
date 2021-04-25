@@ -1,8 +1,8 @@
 # IMPORTED target CURL::libcurl needs 3.12.
-cmake_minimum_required(VERSION 3.12...3.17)
+cmake_minimum_required(VERSION 3.12...3.18)
 
 project(gitea2rss
-  VERSION 0.6.0
+  VERSION 0.7.0
   DESCRIPTION "Generates RSS feeds from Gitea releases or tags."
   LANGUAGES CXX)
 
