@@ -12,6 +12,9 @@ For an example nginx configuration file, see https://schlomp.space/tastytea/gite
 
 == Install
 
+[alt="Packaging status" link=https://repology.org/project/gitea2rss/versions]
+image::https://repology.org/badge/vertical-allrepos/gitea2rss.svg[]
+
 === Gentoo
 
 Add my https://schlomp.space/tastytea/overlay[repository] and install it from
