@@ -17,15 +17,12 @@ image::https://repology.org/badge/vertical-allrepos/gitea2rss.svg[]
 
 === Gentoo
 
-Add my https://schlomp.space/tastytea/overlay[repository] and install it from
-there.
-
 [source,shell]
 ----
-eselect repository enable tastytea
-echo "www-misc/gitea2rss ~amd64" >> /etc/portage/package.accept_keywords/gitea2rss
-emaint sync -r tastytea
-emerge -a dev-util/gitea2rss
+eselect repository enable guru
+echo 'www-misc/gitea2rss' >> /etc/portage/package.accept_keywords/gitea2rss
+emaint sync -r guru
+emerge -a www-misc/gitea2rss
 ----
 
 === From source
